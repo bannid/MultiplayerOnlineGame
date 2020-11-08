@@ -1,7 +1,23 @@
 #include "font_parser.h"
-#include "win32_fileapi.h"
-#include "typedefines.h"
-#include "debug.h"
+#define MAX_WORD_SIZE 30
+
+void get_next_word_from_line(char ** Line,
+							 char * Output,
+							 char Splitter){
+	uint32 Size = 0;
+	while(**Line == ' '){
+		*Line += 1;
+	}
+	while(**Line != Splitter){
+		*Output = **Line;
+		Output++;
+		*Line += 1;
+		Size++;
+	}
+	*Output = '\0';
+	Size++;
+	Assert(Size <= MAX_WORD_SIZE);
+}
 
 bool parse_font_file(const char* FontFilePath){
 	win32_file FontInfo;
@@ -24,18 +40,47 @@ bool parse_font_file(const char* FontFilePath){
 		Assert(Ptr <= EndOfFile);
 		LinesSkipped++;
 	}
+	
+	char * Line = NULL;
+	uint32 MemoryAllocatedForLine = 0;
 	char * LineSeeker = Ptr;
+	
 	//Find out the length of the current line
 	while(*LineSeeker != '\n'){
 		LineSeeker++;
 		LineLength++;
 		Assert(LineSeeker <= EndOfFile);
 	}
+	if(Line == NULL ||
+	   MemoryAllocatedForLine < LineLength){
+		if(Line == NULL){
+			//Have the line length set to the double of this line.
+			Line = new char[LineLength * 2];
+			MemoryAllocatedForLine = LineLength * 2;
+		}
+		else{
+			//If we already have assinged the memory 
+			//for line but its less then required.
+			delete Line;
+			Line = new char[LineLength * 2];
+			MemoryAllocatedForLine = LineLength * 2;
+		}
+	}
 	
-	char * Line = new char[LineLength + 1];
 	CopyMemory((PVOID)Line,(VOID*)Ptr,LineLength);
 	Line[LineLength] = '\0';
+	//We need to free the memory held by line
+	char * LinePtr = Line;
+	char Word[MAX_WORD_SIZE];
+	//We dont care about word 'char'
+	get_next_word_from_line(&LinePtr,Word,' ');
+	//Here we should get 'id={x}'
+	get_next_word_from_line(&LinePtr,Word,' ');
 	
+	get_next_word_from_line(&LinePtr,Word,' ');
+	
+	Assert(Line != NULL);
+	delete Line;
 	close_file(&FontInfo);
 	return true;
 }

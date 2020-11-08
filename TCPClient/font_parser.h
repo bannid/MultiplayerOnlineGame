@@ -1,5 +1,8 @@
 #ifndef FONT_PARSER
 #define FONT_PARSER
+#include "typedefines.h"
+#include "win32_fileapi.h"
+#include "debug.h"
 
 struct character{
 	int32 DecimalCode;
