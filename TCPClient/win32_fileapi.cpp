@@ -1,4 +1,5 @@
 #include "win32_fileapi.h"
+#include "debug.h"
 
 bool read_entire_file(const char* FileName, win32_file * File){
 	File->FileHandle = CreateFileA(
@@ -25,18 +26,24 @@ bool read_entire_file(const char* FileName, win32_file * File){
 	}
 	char * Buffer = (char*)VirtualAlloc(NULL,File->FileSize,MEM_COMMIT,PAGE_READWRITE);
 	DWORD NumberOfBytesRead = 0;
-	BOOL Result = ReadFile(
-		File->FileHandle,
-		(LPVOID)Buffer,
-		File->FileSize,
-		&NumberOfBytesRead,
-		NULL
-		);
-	if(Result == FALSE){
-		CloseHandle(File->FileHandle);
-		VirtualFree(Buffer,File->FileSize,MEM_RELEASE);
-		return false;
+	DWORD TotalNumberOfBytesRead = 0;
+	while(TotalNumberOfBytesRead < File->FileSize){
+		BOOL Result = ReadFile(
+			File->FileHandle,
+			(LPVOID)Buffer,
+			File->FileSize,
+			&NumberOfBytesRead,
+			NULL
+			);
+		if(Result == FALSE){
+			CloseHandle(File->FileHandle);
+			VirtualFree(Buffer,File->FileSize,MEM_RELEASE);
+			return false;
+		}
+		
+		TotalNumberOfBytesRead += NumberOfBytesRead;
 	}
+	Assert(TotalNumberOfBytesRead == File->FileSize);
 	File->Data = Buffer;
 	OutputDebugStringA(Buffer);
 	return true;

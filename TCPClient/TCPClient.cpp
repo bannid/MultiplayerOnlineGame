@@ -10,9 +10,10 @@
 #include "vaonew.h"
 #include "tcp_client.h"
 #include "win32_fileapi.h"
+#include "font_parser.h"
 
-#define VERTEX_SHADER_PATH   "C:\\Users\\Winny-Banni\\source\\repos\\TCPServer\\TCPClient\\VertexShader.glsl"
-#define FRAGMENT_SHADER_PATH "C:\\Users\\Winny-Banni\\source\\repos\\TCPServer\\TCPClient\\SpriteFragmentShader.glsl"
+#define VERTEX_SHADER_PATH   "C:\\Users\\Winny-Banni\\source\\repos\\MultiplayerOnlineGame\\TCPClient\\VertexShader.glsl"
+#define FRAGMENT_SHADER_PATH "C:\\Users\\Winny-Banni\\source\\repos\\MultiplayerOnlineGame\\TCPClient\\SpriteFragmentShader.glsl"
 
 static int GlobalScreenWidth;
 static int GlobalScreenHeight;
@@ -79,9 +80,9 @@ void draw_rectangle(draw_context * DrawContext,
 					int32 BottomRightX,
 					int32 BottomRightY){
 	float vertices[] = {
-		BottomRightX,  TopLeftY,           0.0f,0.5f,0.0f,  // top right
-		BottomRightX,  BottomRightY,       0.0f,0.5f,0.5f,  // bottom right
-        TopLeftX,      BottomRightY,       0.0f,0.0f,0.5f,  // bottom left
+		BottomRightX,  TopLeftY,           0.0f,1.0f,0.0f,  // top right
+		BottomRightX,  BottomRightY,       0.0f,1.0f,1.0f,  // bottom right
+        TopLeftX,      BottomRightY,       0.0f,0.0f,1.0f,  // bottom left
         TopLeftX,      TopLeftY,           0.0f,0.0f,0.0f   // top left 
     };
 	
@@ -89,12 +90,12 @@ void draw_rectangle(draw_context * DrawContext,
         0, 1, 3,  // first Triangle
         1, 2, 3   // second Triangle
     };
-	initialize_vao(&DrawContext->VertexArrayObject,
-				   vertices,
-				   sizeof(vertices),
-				   indices,
-				   sizeof(indices),
-				   5 * sizeof(float));
+	update_vao(&DrawContext->VertexArrayObject,
+			   vertices,
+			   sizeof(vertices),
+			   indices,
+			   sizeof(indices),
+			   5 * sizeof(float));
 	use_shader(DrawContext->Shader.ProgramId);
 	use_vao(DrawContext->VertexArrayObject.VAO);
 	use_texture(DrawContext->Texture.Id);
@@ -117,6 +118,8 @@ int CALLBACK WinMain(HINSTANCE instance,
 					 HINSTANCE prevInstance,
 					 LPSTR commandLine,
 					 int showCode) {
+	
+#if 0	
 	GLFWwindow * Window;
 	if(!init_glfw(&Window,
 				  "Networking game")){
@@ -132,21 +135,26 @@ int CALLBACK WinMain(HINSTANCE instance,
 		return -1;
 	}
 	if(!load_texture(&DrawContext.Texture,
-					 "C:\\Users\\Winny-Banni\\Pictures\\awesomeface.png",
+					 "C:\\Users\\Winny-Banni\\source\\repos\\MultiplayerOnlineGame\\res\\calibri.png",
 					 4)){
 		OutputDebugStringA("Failed to load textures!");
 		return -1;
 	}
+	initialize_vao(&DrawContext.VertexArrayObject);
     while (!glfwWindowShouldClose(Window))
     {
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
         draw_rectangle(&DrawContext,
-					   10,10,
-					   100,100);
+					   0,0,
+					   600,600);
         glfwSwapBuffers(Window);
         glfwPollEvents();
     }
 	glfwTerminate();
+#endif
+	if(!parse_font_file("C:\\Users\\Winny-Banni\\source\\repos\\MultiplayerOnlineGame\\res\\calibri.fnt")){
+		return -1;
+	}
     return 0;
 }
