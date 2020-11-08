@@ -1,0 +1,3 @@
+pushd ..\
+make c 
+popd
