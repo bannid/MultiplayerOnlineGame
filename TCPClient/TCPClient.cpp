@@ -153,7 +153,9 @@ int CALLBACK WinMain(HINSTANCE instance,
     }
 	glfwTerminate();
 #endif
-	if(!parse_font_file("C:\\Users\\Winny-Banni\\source\\repos\\MultiplayerOnlineGame\\res\\calibri.fnt")){
+	character_set Characters;
+	if(!parse_font_file("C:\\Users\\Winny-Banni\\source\\repos\\MultiplayerOnlineGame\\res\\calibri.fnt",
+						&Characters)){
 		return -1;
 	}
     return 0;
