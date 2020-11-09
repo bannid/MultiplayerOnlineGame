@@ -10,7 +10,7 @@
 #include "vaonew.h"
 #include "tcp_client.h"
 #include "win32_fileapi.h"
-#include "font_parser.h"
+#include "heiro_font_parser.h"
 
 #define VERTEX_SHADER_PATH   "C:\\Users\\Winny-Banni\\source\\repos\\MultiplayerOnlineGame\\TCPClient\\VertexShader.glsl"
 #define FRAGMENT_SHADER_PATH "C:\\Users\\Winny-Banni\\source\\repos\\MultiplayerOnlineGame\\TCPClient\\SpriteFragmentShader.glsl"
@@ -158,5 +158,7 @@ int CALLBACK WinMain(HINSTANCE instance,
 						&Characters)){
 		return -1;
 	}
+	char c = 65;
+	OutputDebugStringA("this");
     return 0;
 }

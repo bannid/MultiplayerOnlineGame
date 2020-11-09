@@ -1,4 +1,4 @@
-#include "font_parser.h"
+#include "heiro_font_parser.h"
 #define MAX_WORD_SIZE 30
 
 void get_next_word_from_line(char ** Line,
