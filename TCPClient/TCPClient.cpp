@@ -17,6 +17,9 @@
 
 static int GlobalScreenWidth;
 static int GlobalScreenHeight;
+static texture GlobalFontTexture;
+static character_set GlobalCharacterSet;
+static vao FontVao;
 
 bool connect_to_server(client *Client) {
 	if (initialize_client(Client)) {
@@ -113,17 +116,71 @@ void draw_rectangle(draw_context * DrawContext,
 			  (float)GlobalScreenHeight);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }
-
+inline void draw_char(char C,
+					  int32 TopLeftX,
+					  int32 TopLeftY,
+					  draw_context * DrawContext,
+					  float Size = 1.0f){
+	float BottomRightX = TopLeftX + 10.0f;
+	float BottomRightY = TopLeftY + 10.0f;
+	int32 DecimalCode = (int32)C;
+	character Character = GlobalCharacterSet.Characters[DecimalCode];
+	float TexTopLeftX = (float)Character.X / GlobalCharacterSet.TextureWidth;
+	float TexTopLeftY = (float)Character.Y / GlobalCharacterSet.TextureHeight;
+	float TexBotRightX =(float) (Character.X + Character.Width) / GlobalCharacterSet.TextureWidth;
+	float TexBotRightY =(float) (Character.Y + Character.Height)/ GlobalCharacterSet.TextureHeight;
+	
+	float vertices[] = {
+		BottomRightX,  TopLeftY,           0.0f,TexBotRightX,TexTopLeftY,  // top right
+		BottomRightX,  BottomRightY,       0.0f,TexBotRightX,TexBotRightY,  // bottom right
+        TopLeftX,      BottomRightY,       0.0f,TexTopLeftX,TexBotRightY,  // bottom left
+        TopLeftX,      TopLeftY,           0.0f,TexTopLeftX,TexTopLeftY   // top left 
+    };
+	
+    unsigned int indices[] = {  // note that we start from 0!
+        0, 1, 3,  // first Triangle
+        1, 2, 3   // second Triangle
+    };
+#if 1
+	update_vao(&DrawContext->VertexArrayObject,
+			   vertices,
+			   sizeof(vertices),
+			   indices,
+			   sizeof(indices),
+			   5 * sizeof(float));
+	use_shader(DrawContext->Shader.ProgramId);
+	use_vao(DrawContext->VertexArrayObject.VAO);
+	use_texture(DrawContext->Texture.Id);
+	if(GlobalScreenWidth == 0){
+		GlobalScreenWidth = 1;
+	}
+	if(GlobalScreenHeight == 0){
+		GlobalScreenHeight = 1;
+	}
+	set_float(&DrawContext->Shader,
+			  "ScreenWidth",
+			  (float)GlobalScreenWidth);
+	set_float(&DrawContext->Shader,
+			  "ScreenHeight",
+			  (float)GlobalScreenHeight);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+#endif
+}
 int CALLBACK WinMain(HINSTANCE instance,
 					 HINSTANCE prevInstance,
 					 LPSTR commandLine,
 					 int showCode) {
 	
-#if 0	
+#if 1	
 	GLFWwindow * Window;
 	if(!init_glfw(&Window,
 				  "Networking game")){
 		OutputDebugStringA("Could not init GLFW!");
+		return -1;
+	}
+	if(!parse_font_file("C:\\Users\\Winny-Banni\\source\\repos\\MultiplayerOnlineGame\\res\\calibri.fnt",
+						&GlobalCharacterSet)){
+		OutputDebugStringA("Failed to load the character set info!");
 		return -1;
 	}
 	draw_context DrawContext;
@@ -140,25 +197,33 @@ int CALLBACK WinMain(HINSTANCE instance,
 		OutputDebugStringA("Failed to load textures!");
 		return -1;
 	}
+	if(!load_texture(&GlobalFontTexture,
+					 "C:\\Users\\Winny-Banni\\source\\repos\\MultiplayerOnlineGame\\res\\calibri.png",
+					 4)){
+		OutputDebugStringA("Failed to load font texture!");
+		return -1;
+	}
+	
 	initialize_vao(&DrawContext.VertexArrayObject);
-    while (!glfwWindowShouldClose(Window))
+    initialize_vao(&FontVao);
+	
+	while (!glfwWindowShouldClose(Window))
     {
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
+#if 0
         draw_rectangle(&DrawContext,
 					   0,0,
 					   600,600);
+#endif
+		draw_char('a',
+				  100,
+				  100,
+				  &DrawContext);
         glfwSwapBuffers(Window);
         glfwPollEvents();
     }
 	glfwTerminate();
 #endif
-	character_set Characters;
-	if(!parse_font_file("C:\\Users\\Winny-Banni\\source\\repos\\MultiplayerOnlineGame\\res\\calibri.fnt",
-						&Characters)){
-		return -1;
-	}
-	char c = 65;
-	OutputDebugStringA("this");
     return 0;
 }

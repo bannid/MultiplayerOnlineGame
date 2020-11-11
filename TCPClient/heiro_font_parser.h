@@ -19,6 +19,10 @@ struct character{
 };
 struct character_set{
 	character Characters[MAX_CHARACTERS];
+	// TODO(Banni): Load this from the file
+	uint32 TextureWidth = 512;
+	uint32 TextureHeight = 512;
+	
 };
 bool parse_font_file(const char* FontFilePath,
 					 character_set * Characters);
