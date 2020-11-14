@@ -7,6 +7,8 @@
 #include <stdlib.h>
 
 #define MAX_CHARACTERS 150
+#define MAX_LENGTH_FONT_NAME 20
+
 struct character{
 	int32 DecimalCode;
 	int32 X;
@@ -19,9 +21,12 @@ struct character{
 };
 struct character_set{
 	character Characters[MAX_CHARACTERS];
-	// TODO(Banni): Load this from the file
-	uint32 TextureWidth = 512;
-	uint32 TextureHeight = 512;
+	int32 LineHeight;
+	int32 Size;
+	char FontName[MAX_LENGTH_FONT_NAME];
+	char FileName[MAX_LENGTH_FONT_NAME];
+	uint32 TextureWidth;
+	uint32 TextureHeight;
 	
 };
 bool parse_font_file(const char* FontFilePath,

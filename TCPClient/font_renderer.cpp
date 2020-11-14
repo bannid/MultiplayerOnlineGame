@@ -1,7 +1,5 @@
 #include "font_renderer.h"
 
-// NOTE(Banni): This function should only be called
-//through draw_string
 inline void draw_char(char C,
 					  int32 TopLeftX,
 					  int32 TopLeftY,
@@ -31,7 +29,6 @@ inline void draw_char(char C,
         0, 1, 3,  // first Triangle
         1, 2, 3   // second Triangle
     };
-#if 1
 	update_vao(&DrawContext->VertexArrayObject,
 			   vertices,
 			   sizeof(vertices),
@@ -45,7 +42,6 @@ inline void draw_char(char C,
 			  "ScreenHeight",
 			  (float)DrawContext->ScreenHeight);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-#endif
 }
 
 void draw_string(const char* String,

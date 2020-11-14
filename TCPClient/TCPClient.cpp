@@ -115,7 +115,11 @@ int CALLBACK WinMain(HINSTANCE instance,
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 		draw_string("Hey there how are you doing? This is some text",
-					100,100,
+					0,0,
+					&FontDrawer,
+					0.4f);
+		draw_string("I am fine! Thanks.",
+					0,FontDrawer.CharacterSet.LineHeight * 0.4,
 					&FontDrawer,
 					0.4f);
 		glfwSwapBuffers(Window);

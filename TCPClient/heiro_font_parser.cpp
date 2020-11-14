@@ -7,11 +7,18 @@ void get_next_word_from_line(char ** Line,
 	while(**Line == ' '){
 		*Line += 1;
 	}
-	while(**Line != ' '){
+	while(**Line != ' ' &&
+		  **Line != '\r' &&
+		  **Line != '\n'){
 		*Output = **Line;
 		Output++;
 		*Line += 1;
 		Size++;
+	}
+	while(**Line == ' ' ||
+		  **Line == '\r' ||
+		  **Line == '\n'){
+		*Line+=1;
 	}
 	*Output = '\0';
 	Size++;
@@ -67,6 +74,22 @@ bool compare_strings(const char* First,
 	return true;
 }
 
+void copy_filename_face(char * Source,
+						char * Destination){
+	int32 Size = 0;
+	while(*Source != '\0'){
+		if(*Source == '"'){
+			Source++;
+			continue;
+		}
+		*Destination = *Source;
+		Destination++;
+		Source++;
+		Assert(Size < MAX_WORD_SIZE);
+	}
+	*Destination = '\0';
+}
+
 bool parse_font_file(const char* FontFilePath,
 					 character_set * CharacterSet){
 	win32_file FontInfo;
@@ -74,7 +97,48 @@ bool parse_font_file(const char* FontFilePath,
 						 &FontInfo)){
 		return false;
 	}
-	
+	char * MetaDataPtr = FontInfo.Data;
+	//Read the meta data from the file
+	while(*MetaDataPtr != '\n'){
+		char MetaData[MAX_WORD_SIZE];
+		get_next_word_from_line(&MetaDataPtr,
+								MetaData);
+		if(compare_strings("info",
+						   MetaData)){
+			continue;
+		}
+		if(compare_strings("common",MetaData)){
+			continue;
+		}
+		if(compare_strings("chars",MetaData)){
+			break;
+		}
+		char AttributeType[MAX_WORD_SIZE];
+		char AttributeValue[MAX_WORD_SIZE];
+		parse_attribute(MetaData,
+						AttributeType,
+						AttributeValue);
+		if(compare_strings("size",AttributeType)){
+			CharacterSet->Size = strtol(AttributeValue,NULL,10);
+		}
+		if(compare_strings("lineHeight",AttributeType)){
+			CharacterSet->LineHeight = strtol(AttributeValue,NULL,10);
+		}
+		if(compare_strings("face",AttributeType)){
+			copy_filename_face(AttributeValue,
+							   CharacterSet->FontName);
+		}
+		if(compare_strings("file",AttributeType)){
+			copy_filename_face(AttributeValue,
+							   CharacterSet->FileName);
+		}
+		if(compare_strings("scaleW",AttributeType)){
+			CharacterSet->TextureWidth = strtol(AttributeValue,NULL,10);
+		}
+		if(compare_strings("scaleH",AttributeType)){
+			CharacterSet->TextureHeight = strtol(AttributeValue,NULL,10);
+		}
+	}
 	char * Ptr = FontInfo.Data;
 	char * EndOfFile = FontInfo.Data + FontInfo.FileSize;
 	int32 LinesSkipped = 0;
