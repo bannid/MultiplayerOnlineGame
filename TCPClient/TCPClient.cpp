@@ -14,10 +14,9 @@
 
 #define VERTEX_SHADER_PATH   "C:\\Users\\Winny-Banni\\source\\repos\\MultiplayerOnlineGame\\TCPClient\\VertexShader.glsl"
 #define FRAGMENT_SHADER_PATH "C:\\Users\\Winny-Banni\\source\\repos\\MultiplayerOnlineGame\\TCPClient\\SpriteFragmentShader.glsl"
-
+#define FONT_FRAGMENT_SHADER_PATH "C:\\Users\\Winny-Banni\\source\\repos\\MultiplayerOnlineGame\\TCPClient\\FontFragmentShader.glsl"
 static int GlobalScreenWidth;
 static int GlobalScreenHeight;
-static texture GlobalFontTexture;
 static character_set GlobalCharacterSet;
 static vao FontVao;
 
@@ -116,15 +115,21 @@ void draw_rectangle(draw_context * DrawContext,
 			  (float)GlobalScreenHeight);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }
+// NOTE(Banni): This function should only be called
+//through draw_string
 inline void draw_char(char C,
 					  int32 TopLeftX,
 					  int32 TopLeftY,
 					  draw_context * DrawContext,
-					  float Size = 1.0f){
-	float BottomRightX = TopLeftX + 10.0f;
-	float BottomRightY = TopLeftY + 10.0f;
+					  float Size){
 	int32 DecimalCode = (int32)C;
 	character Character = GlobalCharacterSet.Characters[DecimalCode];
+	float CharacterWidth = (float)Character.Width * Size;
+	float CharacterHeight = (float)Character.Height * Size;
+	
+	float BottomRightX = TopLeftX + CharacterWidth;
+	float BottomRightY = TopLeftY + CharacterHeight;
+	
 	float TexTopLeftX = (float)Character.X / GlobalCharacterSet.TextureWidth;
 	float TexTopLeftY = (float)Character.Y / GlobalCharacterSet.TextureHeight;
 	float TexBotRightX =(float) (Character.X + Character.Width) / GlobalCharacterSet.TextureWidth;
@@ -166,6 +171,29 @@ inline void draw_char(char C,
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 #endif
 }
+
+void draw_string(const char* String,
+				 int32 X,
+				 int32 Y,
+				 draw_context * DrawContext,
+				 float Size = 1.0f){
+	while(*String != '\0'){
+		char C = *String;
+		int32 DecimalCode = int32(C);
+		character Character = GlobalCharacterSet.Characters[DecimalCode];
+		int32 XAdvance = Character.XAdvance * Size;
+		int32 YOffset = Character.YOffset * Size;
+		int32 XOffset = Character.XOffset * Size;
+		draw_char(*String,
+				  X + XOffset,
+				  Y + YOffset,
+				  DrawContext,
+				  Size);
+		String++;
+		X += XAdvance;
+	}
+}
+
 int CALLBACK WinMain(HINSTANCE instance,
 					 HINSTANCE prevInstance,
 					 LPSTR commandLine,
@@ -183,47 +211,36 @@ int CALLBACK WinMain(HINSTANCE instance,
 		OutputDebugStringA("Failed to load the character set info!");
 		return -1;
 	}
-	draw_context DrawContext;
-	if(!compile_shader(&DrawContext.Shader,
+	
+	draw_context FontDrawer;
+	if(!compile_shader(&FontDrawer.Shader,
 					   VERTEX_SHADER_PATH,
-					   FRAGMENT_SHADER_PATH
+					   FONT_FRAGMENT_SHADER_PATH
 					   )){
 		OutputDebugStringA("Shader compilation failed!");
 		return -1;
 	}
-	if(!load_texture(&DrawContext.Texture,
-					 "C:\\Users\\Winny-Banni\\source\\repos\\MultiplayerOnlineGame\\res\\calibri.png",
-					 4)){
-		OutputDebugStringA("Failed to load textures!");
-		return -1;
-	}
-	if(!load_texture(&GlobalFontTexture,
+	if(!load_texture(&FontDrawer.Texture,
 					 "C:\\Users\\Winny-Banni\\source\\repos\\MultiplayerOnlineGame\\res\\calibri.png",
 					 4)){
 		OutputDebugStringA("Failed to load font texture!");
 		return -1;
 	}
 	
-	initialize_vao(&DrawContext.VertexArrayObject);
-    initialize_vao(&FontVao);
+	initialize_vao(&FontDrawer.VertexArrayObject);
 	
 	while (!glfwWindowShouldClose(Window))
-    {
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
-#if 0
-        draw_rectangle(&DrawContext,
-					   0,0,
-					   600,600);
-#endif
-		draw_char('a',
-				  100,
-				  100,
-				  &DrawContext);
-        glfwSwapBuffers(Window);
-        glfwPollEvents();
-    }
+	{
+		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT);
+		draw_string("Hey there how are you doing? This is some text",
+					100,100,
+					&FontDrawer,
+					0.4f);
+		glfwSwapBuffers(Window);
+		glfwPollEvents();
+	}
 	glfwTerminate();
 #endif
-    return 0;
+	return 0;
 }
