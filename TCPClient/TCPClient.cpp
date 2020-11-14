@@ -11,6 +11,7 @@
 #include "tcp_client.h"
 #include "win32_fileapi.h"
 #include "heiro_font_parser.h"
+#include "colors.h"
 
 #define VERTEX_SHADER_PATH   "C:\\Users\\Winny-Banni\\source\\repos\\MultiplayerOnlineGame\\TCPClient\\VertexShader.glsl"
 #define FRAGMENT_SHADER_PATH "C:\\Users\\Winny-Banni\\source\\repos\\MultiplayerOnlineGame\\TCPClient\\SpriteFragmentShader.glsl"
@@ -153,9 +154,6 @@ inline void draw_char(char C,
 			   indices,
 			   sizeof(indices),
 			   5 * sizeof(float));
-	use_shader(DrawContext->Shader.ProgramId);
-	use_vao(DrawContext->VertexArrayObject.VAO);
-	use_texture(DrawContext->Texture.Id);
 	if(GlobalScreenWidth == 0){
 		GlobalScreenWidth = 1;
 	}
@@ -177,6 +175,12 @@ void draw_string(const char* String,
 				 int32 Y,
 				 draw_context * DrawContext,
 				 float Size = 1.0f){
+	use_shader(DrawContext->Shader.ProgramId);
+	use_vao(DrawContext->VertexArrayObject.VAO);
+	use_texture(DrawContext->Texture.Id);
+	set_vec4(&DrawContext->Shader,
+			 "FontColor",
+			 WHITE);
 	while(*String != '\0'){
 		char C = *String;
 		int32 DecimalCode = int32(C);
@@ -217,7 +221,7 @@ int CALLBACK WinMain(HINSTANCE instance,
 					   VERTEX_SHADER_PATH,
 					   FONT_FRAGMENT_SHADER_PATH
 					   )){
-		OutputDebugStringA("Shader compilation failed!");
+		OutputDebugStringA("Font shader compilation failed!");
 		return -1;
 	}
 	if(!load_texture(&FontDrawer.Texture,
@@ -228,7 +232,6 @@ int CALLBACK WinMain(HINSTANCE instance,
 	}
 	
 	initialize_vao(&FontDrawer.VertexArrayObject);
-	
 	while (!glfwWindowShouldClose(Window))
 	{
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
