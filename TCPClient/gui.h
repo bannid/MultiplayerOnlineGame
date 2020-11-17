@@ -3,6 +3,7 @@
 #include "typedefines.h"
 #include "debug.h"
 #include "colors.h"
+#include "win32_includes.h"
 
 #define MAX_CONSTRAINTS 50
 #define NOT_APPLICABLE 0xFFFFFFFF
@@ -26,9 +27,9 @@ enum constraint_type: uint16{
 };
 
 enum constraint_value_type: uint16{
-	RELATIVE,
-	FIXED
-}
+	RELATIVE_VALUE,
+	FIXED_VALUE
+};
 
 struct constraint{
 	constraint_type Type;

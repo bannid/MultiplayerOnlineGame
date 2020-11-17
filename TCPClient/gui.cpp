@@ -7,7 +7,7 @@ static bool MasterGUIInitialized = false;
 void initialize_constraint(constraint * Constraint,
 						   constraint_type Type,
 						   constraint_value_type ValueType,
-						   int32 Value,
+						   int32 Value
 						   ){
 	//Check if mandatory data is being passed in
 	switch(Type){
