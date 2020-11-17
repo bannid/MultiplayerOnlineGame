@@ -55,6 +55,7 @@ void draw_string(const char* String,
 	set_vec4(&DrawContext->Shader,
 			 "FontColor",
 			 WHITE);
+	Size = (float)Size / DrawContext->CharacterSet.Size;
 	while(*String != '\0'){
 		char C = *String;
 		int32 DecimalCode = int32(C);

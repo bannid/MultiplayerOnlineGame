@@ -4,7 +4,6 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include <iostream>
 #include "shadernew.h"
 #include "texturenew.h"
 #include "vaonew.h"
@@ -14,10 +13,12 @@
 #include "colors.h"
 #include "common_client.h"
 #include "font_renderer.h"
+#include "gui.h"
 
 #define VERTEX_SHADER_PATH   "C:\\Users\\Winny-Banni\\source\\repos\\MultiplayerOnlineGame\\TCPClient\\VertexShader.glsl"
 #define FRAGMENT_SHADER_PATH "C:\\Users\\Winny-Banni\\source\\repos\\MultiplayerOnlineGame\\TCPClient\\SpriteFragmentShader.glsl"
 #define FONT_FRAGMENT_SHADER_PATH "C:\\Users\\Winny-Banni\\source\\repos\\MultiplayerOnlineGame\\TCPClient\\FontFragmentShader.glsl"
+
 static int GlobalScreenWidth;
 static int GlobalScreenHeight;
 static character_set GlobalCharacterSet;
@@ -114,14 +115,15 @@ int CALLBACK WinMain(HINSTANCE instance,
 		FontDrawer.ScreenWidth = GlobalScreenWidth;
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
+		float FontSize = 20.0f;
 		draw_string("Hey there how are you doing? This is some text",
 					0,0,
 					&FontDrawer,
-					0.4f);
+					20.0f);
 		draw_string("I am fine! Thanks.",
-					0,FontDrawer.CharacterSet.LineHeight * 0.4,
+					0,FontDrawer.CharacterSet.LineHeight * 0.22889,
 					&FontDrawer,
-					0.4f);
+					20.0f);
 		glfwSwapBuffers(Window);
 		glfwPollEvents();
 	}
