@@ -120,10 +120,6 @@ int CALLBACK WinMain(HINSTANCE instance,
 					0,0,
 					&FontDrawer,
 					20.0f);
-		draw_string("I am fine! Thanks.",
-					0,FontDrawer.CharacterSet.LineHeight * 0.22889,
-					&FontDrawer,
-					20.0f);
 		glfwSwapBuffers(Window);
 		glfwPollEvents();
 	}

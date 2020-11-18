@@ -29,8 +29,6 @@ void initialize_constraint(constraint * Constraint,
 void init_gui(gui * Gui,
 			  uint32 Height,
 			  uint32 Width,
-			  int32 TopLeftX,
-			  int32 TopLeftY,
 			  gui * Parent){
 	Gui->Height = Height;
 	Gui->Width = Width;
@@ -41,4 +39,11 @@ void init_gui(gui * Gui,
 	else{
 		Gui->Parent = Parent;
 	}
+	Gui->NumberOfConstraints = 0;
+}
+
+void add_constraint_gui(gui * Gui,
+						constraint Constraint){
+	Gui->Constraints[Gui->NumberOfConstraints++] = Constraint;
+	Assert(Gui->NumberOfConstraints <= MAX_CONSTRAINTS);
 }

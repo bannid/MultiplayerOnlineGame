@@ -60,9 +60,9 @@ void draw_string(const char* String,
 		char C = *String;
 		int32 DecimalCode = int32(C);
 		character Character = DrawContext->CharacterSet.Characters[DecimalCode];
-		int32 XAdvance = Character.XAdvance * Size;
-		int32 YOffset = Character.YOffset * Size;
-		int32 XOffset = Character.XOffset * Size;
+		int32 XAdvance = (Character.XAdvance * Size) + 0.5f;
+		int32 YOffset = (Character.YOffset * Size) + 0.5f;
+		int32 XOffset = (Character.XOffset * Size) + 0.5f;;
 		draw_char(*String,
 				  X + XOffset,
 				  Y + YOffset,

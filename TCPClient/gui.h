@@ -6,7 +6,7 @@
 #include "win32_includes.h"
 
 #define MAX_CONSTRAINTS 50
-#define NOT_APPLICABLE 0xFFFFFFFF
+#define NOT_APPLICABLE  0xFFFFFFFF
 
 enum constraint_type: uint16{
 	//Alignment
@@ -41,20 +41,16 @@ struct gui{
 	int32 Height;
 	int32 Width;
 	constraint Constraints[MAX_CONSTRAINTS];
-	uint32 NumberOfConstraints;
-	gui * ChildGuis;
+	int32 NumberOfConstraints;
 	gui * Parent;
-	int32 NumberOfChildren;
 };
 
 void init_gui(gui * Gui,
 			  uint32 Height,
 			  uint32 Width,
-			  int32 TopLeftX,
-			  int32 TopLeftY,
 			  gui * Parent);
 
-bool add_constraint_gui(gui * Gui,
+void add_constraint_gui(gui * Gui,
 						constraint Constraint);
 
 void initialize_constraint(constraint * Constraint,
