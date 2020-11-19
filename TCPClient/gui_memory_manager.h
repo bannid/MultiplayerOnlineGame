@@ -11,7 +11,6 @@
 struct gui_manager{
 	gui * GuisMemory;
 	int32 NumberOfGuis;
-	int32 OccupiedSlots[MAX_NUMBER_GUIS];
 };
 
 void initialize_gui_manager(gui_manager * GuiManager,

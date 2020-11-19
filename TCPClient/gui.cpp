@@ -51,4 +51,5 @@ void add_child(gui * GuiParent,
 			   gui * GuiChild){
 	Assert(GuiParent->NumberOfChildren < MAX_DIRECT_CHILDREN_PER_GUI);
 	GuiParent->Children[GuiParent->NumberOfChildren++] = GuiChild;
+	GuiChild->Parent = GuiParent;
 }

@@ -80,8 +80,13 @@ void process_gui_constraints(gui * Gui){
 	}
 	
 }
-
+// NOTE(Banni): This function may result in stack overflow
 void draw_gui(gui * Gui,
 			  draw_context * DrawContext){
 	process_gui_constraints(Gui);
+	// TODO(Banni): Draw the current gui here.
+	for(int i = 0; i<Gui->NumberOfChildren; i++){
+		draw_gui(Gui->Children[i],
+				 DrawContext);
+	}
 }
