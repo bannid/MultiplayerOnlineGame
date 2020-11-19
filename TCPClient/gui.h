@@ -22,8 +22,8 @@ enum constraint_type: uint16{
 	MARGIN_RIGHT,
 	MARGIN,
 	//Size
-	RELATIVE_SIZE,
-	FIXED_SIZE
+	HEIGHT,
+	WIDTH
 };
 
 enum constraint_value_type: uint16{
@@ -38,8 +38,13 @@ struct constraint{
 };
 
 struct gui{
+	// NOTE(Banni): These values must be calculated
+	// from the constraints or set by animator.
 	int32 Height;
 	int32 Width;
+	int32 TopLeftX;
+	int32 TopLeftY;
+	
 	constraint Constraints[MAX_CONSTRAINTS];
 	int32 NumberOfConstraints;
 	gui * Parent;

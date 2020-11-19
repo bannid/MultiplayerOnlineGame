@@ -14,9 +14,7 @@ void initialize_constraint(constraint * Constraint,
 		case MARGIN_TOP:
 		case MARGIN_LEFT:
 		case MARGIN_RIGHT:
-		case MARGIN_BOTTOM:
-		case RELATIVE_SIZE:
-		case FIXED_SIZE:{
+		case MARGIN_BOTTOM:{
 			Assert(Value != NOT_APPLICABLE);
 			break;
 		}

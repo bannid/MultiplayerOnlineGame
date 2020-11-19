@@ -27,7 +27,6 @@ struct character_set{
 	char FileName[MAX_LENGTH_FONT_NAME];
 	uint32 TextureWidth;
 	uint32 TextureHeight;
-	
 };
 bool parse_font_file(const char* FontFilePath,
 					 character_set * Characters);
