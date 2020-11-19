@@ -5,6 +5,7 @@
 #include "colors.h"
 #include "win32_includes.h"
 
+#define MAX_DIRECT_CHILDREN_PER_GUI 50
 #define MAX_CONSTRAINTS 50
 #define NOT_APPLICABLE  0xFFFFFFFF
 
@@ -48,6 +49,8 @@ struct gui{
 	constraint Constraints[MAX_CONSTRAINTS];
 	int32 NumberOfConstraints;
 	gui * Parent;
+	gui * Children[MAX_DIRECT_CHILDREN_PER_GUI];
+	int32 NumberOfChildren;
 };
 
 void init_gui(gui * Gui,
@@ -57,6 +60,8 @@ void init_gui(gui * Gui,
 
 void add_constraint_gui(gui * Gui,
 						constraint Constraint);
+void add_child(gui * GuiParent,
+			   gui * GuiChild);
 
 void initialize_constraint(constraint * Constraint,
 						   constraint_type Type,

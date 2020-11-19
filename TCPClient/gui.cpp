@@ -38,10 +38,17 @@ void init_gui(gui * Gui,
 		Gui->Parent = Parent;
 	}
 	Gui->NumberOfConstraints = 0;
+	Gui->NumberOfChildren = 0;
 }
 
 void add_constraint_gui(gui * Gui,
 						constraint Constraint){
 	Gui->Constraints[Gui->NumberOfConstraints++] = Constraint;
 	Assert(Gui->NumberOfConstraints <= MAX_CONSTRAINTS);
+}
+
+void add_child(gui * GuiParent,
+			   gui * GuiChild){
+	Assert(GuiParent->NumberOfChildren < MAX_DIRECT_CHILDREN_PER_GUI);
+	GuiParent->Children[GuiParent->NumberOfChildren++] = GuiChild;
 }

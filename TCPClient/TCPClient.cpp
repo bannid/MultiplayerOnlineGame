@@ -15,14 +15,20 @@
 #include "font_renderer.h"
 #include "gui.h"
 
+//Asset paths
 #define VERTEX_SHADER_PATH   "C:\\Users\\Winny-Banni\\source\\repos\\MultiplayerOnlineGame\\TCPClient\\VertexShader.glsl"
 #define FRAGMENT_SHADER_PATH "C:\\Users\\Winny-Banni\\source\\repos\\MultiplayerOnlineGame\\TCPClient\\SpriteFragmentShader.glsl"
 #define FONT_FRAGMENT_SHADER_PATH "C:\\Users\\Winny-Banni\\source\\repos\\MultiplayerOnlineGame\\TCPClient\\FontFragmentShader.glsl"
+#define GUI_FRAGMENT_SHADER_PATH "C:\\Users\\Winny-Banni\\source\\repos\\MultiplayerOnlineGame\\TCPClient\\GuiFragmentShader.glsl"
+
+#define MAX_NUMBER_GUIS 100
+#include "gui_memory_manager.h"
 
 static int GlobalScreenWidth;
 static int GlobalScreenHeight;
 static character_set GlobalCharacterSet;
-static vao FontVao;
+static gui_manager GlobalGuiManager;
+static gui * GlobalMasterGui;
 
 bool connect_to_server(client *Client) {
 	if (initialize_client(Client)) {
@@ -87,6 +93,8 @@ int CALLBACK WinMain(HINSTANCE instance,
 		return -1;
 	}
 	draw_context FontDrawer;
+	draw_context GuiDrawer;
+	
 	if(!parse_font_file("C:\\Users\\Winny-Banni\\source\\repos\\MultiplayerOnlineGame\\res\\calibri.fnt",
 						&FontDrawer.CharacterSet)){
 		OutputDebugStringA("Failed to load the character set info!");
@@ -101,6 +109,16 @@ int CALLBACK WinMain(HINSTANCE instance,
 		OutputDebugStringA("Font shader compilation failed!");
 		return -1;
 	}
+	
+	
+	if(!compile_shader(&GuiDrawer.Shader,
+					   VERTEX_SHADER_PATH,
+					   GUI_FRAGMENT_SHADER_PATH
+					   )){
+		OutputDebugStringA("GUI shader compilation failed!");
+		return -1;
+	}
+	
 	if(!load_texture(&FontDrawer.Texture,
 					 "C:\\Users\\Winny-Banni\\source\\repos\\MultiplayerOnlineGame\\res\\calibri.png",
 					 4)){
@@ -109,10 +127,24 @@ int CALLBACK WinMain(HINSTANCE instance,
 	}
 	
 	initialize_vao(&FontDrawer.VertexArrayObject);
+	initialize_vao(&GuiDrawer.VertexArrayObject);
+	
+	// TODO(Banni): Allocate some memory for GUIs upfront.
+	int32 SizeOfMemory = MAX_NUMBER_GUIS * sizeof(gui);
+	gui * GuiMemory = (gui*)VirtualAlloc(NULL,
+										 MAX_NUMBER_GUIS * sizeof(gui),
+										 MEM_COMMIT,
+										 PAGE_READWRITE);
+	initialize_gui_manager(&GlobalGuiManager,
+						   GuiMemory);
+	GlobalMasterGui = get_memory_for_gui(&GlobalGuiManager);
 	while (!glfwWindowShouldClose(Window))
 	{
 		FontDrawer.ScreenHeight = GlobalScreenHeight;
 		FontDrawer.ScreenWidth = GlobalScreenWidth;
+		GuiDrawer.ScreenWidth  = GlobalScreenWidth;
+		GuiDrawer.ScreenHeight = GlobalScreenHeight;
+		
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 		float FontSize = 20.0f;
