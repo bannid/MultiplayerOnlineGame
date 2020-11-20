@@ -156,6 +156,14 @@ int CALLBACK WinMain(HINSTANCE instance,
 	gui * SomeGui = get_memory_for_gui(&GlobalGuiManager);
 	add_child(GlobalMasterGui,
 			  SomeGui);
+	add_constraint_gui(SomeGui,
+					   HEIGHT,
+					   100,
+					   FIXED_VALUE);
+	add_constraint_gui(SomeGui,
+					   WIDTH,
+					   100,
+					   FIXED_VALUE);
 	while (!glfwWindowShouldClose(Window))
 	{
 		FontDrawer.ScreenHeight = GlobalScreenHeight;
@@ -168,11 +176,11 @@ int CALLBACK WinMain(HINSTANCE instance,
 		render_guis(GlobalMasterGui,
 					&GuiDrawer);
 		
-		float FontSize = 20.0f;
+		float FontSize = 87.0f;
 		draw_string("Hey there how are you doing? This is some text",
 					0,0,
 					&FontDrawer,
-					20.0f);
+					FontSize);
 		glfwSwapBuffers(Window);
 		glfwPollEvents();
 	}

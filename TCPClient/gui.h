@@ -29,12 +29,13 @@ enum constraint_type: uint16{
 
 enum constraint_value_type: uint16{
 	RELATIVE_VALUE,
-	FIXED_VALUE
+	FIXED_VALUE,
+	NO_VALUE
 };
 
 struct constraint{
 	constraint_type Type;
-	int32 Value;
+	float Value;
 	constraint_value_type ValueType;
 };
 
@@ -59,12 +60,10 @@ void init_gui(gui * Gui,
 			  gui * Parent);
 
 void add_constraint_gui(gui * Gui,
-						constraint Constraint);
+						constraint_type ConstraintType,
+						float ConstraintValue,
+						constraint_value_type ConstraintValueType);
 void add_child(gui * GuiParent,
 			   gui * GuiChild);
 
-void initialize_constraint(constraint * Constraint,
-						   constraint_type Type,
-						   constraint_value_type ValueType,
-						   int32 Value);
 #endif

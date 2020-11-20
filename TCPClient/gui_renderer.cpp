@@ -19,10 +19,20 @@ void process_gui_constraints(gui * Gui){
 	//depend on these two.
 	for(int i = 0; i<Gui->NumberOfConstraints;i++){
 		if(Gui->Constraints[i].Type == HEIGHT){
-			
+			if(Gui->Constraints[i].ValueType == RELATIVE_VALUE){
+				Gui->Height = Pg->Height * Gui->Constraints[i].Value;
+			}
+			else if(Gui->Constraints[i].ValueType == FIXED_VALUE){
+				Gui->Height = (int32)Gui->Constraints[i].Value;
+			}
 		}
 		else if(Gui->Constraints[i].Type == WIDTH){
-			
+			if(Gui->Constraints[i].ValueType == RELATIVE_VALUE){
+				Gui->Width = Pg->Width * Gui->Constraints[i].Value;
+			}
+			else if(Gui->Constraints[i].ValueType == FIXED_VALUE){
+				Gui->Width = (int32)Gui->Constraints[i].Value;
+			}
 		}
 	}
 	
