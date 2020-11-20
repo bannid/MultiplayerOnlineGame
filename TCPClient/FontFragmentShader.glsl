@@ -8,7 +8,7 @@ uniform vec4 FontColor;
 void main(){
 	fragColor = texture(FontTexture,texCoordOut);
 	fragColor *= FontColor;
-	if(fragColor.a < 0.2f){
+	if(fragColor.a < 0.1f){
 		discard;
 	}
 }

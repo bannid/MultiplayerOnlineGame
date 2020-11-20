@@ -1,3 +1,24 @@
+/*
+TODO List:
+-- Text rendering inside the guis.
+-- Do the font rendering using the Signed distance fields for better quality.
+-- Implement the ability to add various properties onto the guis.
+-- Add a titled gui.
+ -- Implement the functionality to swap guis dynamically for better memory
+    utilization.
+ -- Create buttons.
+ -- Create input boxes and dynamic array to fit varying size data in it.
+ -- Kind of chat_gui_manager that gives us chat windows to chat to other players?
+ -- Animations for the guis.
+  -- Implement timer class for the guis.
+  -- // NOTE(Banni): More things put here....
+  
+ TODO Nice to have:
+ 1. Drag and drop feature for the guis.
+ 2. Fancy animatons?
+ 3. Assets to c code converter to pack all the resources in single exe.
+ 4. Sound.
+*/
 #include "win32_includes.h"
 #include <glad.h>
 #include <glfw3.h>
@@ -140,7 +161,6 @@ int CALLBACK WinMain(HINSTANCE instance,
 	initialize_vao(&FontDrawer.VertexArrayObject);
 	initialize_vao(&GuiDrawer.VertexArrayObject);
 	
-	// TODO(Banni): Allocate some memory for GUIs upfront.
 	int32 SizeOfMemory = MAX_NUMBER_GUIS * sizeof(gui);
 	gui * GuiMemory = (gui*)VirtualAlloc(NULL,
 										 MAX_NUMBER_GUIS * sizeof(gui),
@@ -176,7 +196,7 @@ int CALLBACK WinMain(HINSTANCE instance,
 		render_guis(GlobalMasterGui,
 					&GuiDrawer);
 		
-		float FontSize = 87.0f;
+		float FontSize = 42.0f;
 		draw_string("Hey there how are you doing? This is some text",
 					0,0,
 					&FontDrawer,
