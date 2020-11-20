@@ -153,6 +153,9 @@ int CALLBACK WinMain(HINSTANCE instance,
 	GlobalMasterGui->Parent = NULL;
 	GlobalMasterGui->Height = GlobalScreenHeight;
 	GlobalMasterGui->Width = GlobalScreenWidth;
+	gui * SomeGui = get_memory_for_gui(&GlobalGuiManager);
+	add_child(GlobalMasterGui,
+			  SomeGui);
 	while (!glfwWindowShouldClose(Window))
 	{
 		FontDrawer.ScreenHeight = GlobalScreenHeight;
@@ -160,11 +163,11 @@ int CALLBACK WinMain(HINSTANCE instance,
 		GuiDrawer.ScreenWidth  = GlobalScreenWidth;
 		GuiDrawer.ScreenHeight = GlobalScreenHeight;
 		
+		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT);
 		render_guis(GlobalMasterGui,
 					&GuiDrawer);
 		
-		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
 		float FontSize = 20.0f;
 		draw_string("Hey there how are you doing? This is some text",
 					0,0,

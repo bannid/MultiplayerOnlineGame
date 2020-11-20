@@ -83,8 +83,17 @@ void process_gui_constraints(gui * Gui){
 // NOTE(Banni): This function may result in stack overflow
 void draw_gui(gui * Gui,
 			  draw_context * DrawContext){
+	use_shader(DrawContext->Shader.ProgramId);
 	process_gui_constraints(Gui);
+	set_vec4(&DrawContext->Shader,
+			 "Color",
+			 RED);
 	// TODO(Banni): Draw the current gui here.
+	draw_rectangle(DrawContext,
+				   Gui->TopLeftX,
+				   Gui->TopLeftY,
+				   Gui->TopLeftX + Gui->Width,
+				   Gui->TopLeftX + Gui->Height);
 	for(int i = 0; i<Gui->NumberOfChildren; i++){
 		draw_gui(Gui->Children[i],
 				 DrawContext);
