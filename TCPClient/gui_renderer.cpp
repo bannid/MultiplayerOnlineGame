@@ -42,7 +42,8 @@ void process_gui_constraints(gui * Gui){
 		switch(Gui->Constraints[i].Type){
 			
 			case CENTER:{
-				
+				Gui->TopLeftX += Gui->Parent->Width / 2 - Gui->Width / 2;
+				Gui->TopLeftY += Gui->Parent->Height/ 2 - Gui->Height / 2;
 				break;
 			}
 			
@@ -103,7 +104,7 @@ void draw_gui(gui * Gui,
 				   Gui->TopLeftX,
 				   Gui->TopLeftY,
 				   Gui->TopLeftX + Gui->Width,
-				   Gui->TopLeftX + Gui->Height);
+				   Gui->TopLeftY + Gui->Height);
 	for(int i = 0; i<Gui->NumberOfChildren; i++){
 		draw_gui(Gui->Children[i],
 				 DrawContext);

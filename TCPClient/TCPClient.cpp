@@ -20,11 +20,7 @@ TODO List:
  4. Sound.
 */
 #include "win32_includes.h"
-#include <glad.h>
-#include <glfw3.h>
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
+#include "opengl_includes.h"
 #include "shadernew.h"
 #include "texturenew.h"
 #include "vaonew.h"
@@ -184,6 +180,10 @@ int CALLBACK WinMain(HINSTANCE instance,
 					   WIDTH,
 					   100,
 					   FIXED_VALUE);
+	add_constraint_gui(SomeGui,
+					   CENTER,
+					   0,
+					   NO_VALUE);
 	while (!glfwWindowShouldClose(Window))
 	{
 		FontDrawer.ScreenHeight = GlobalScreenHeight;
