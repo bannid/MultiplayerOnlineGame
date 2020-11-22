@@ -47,37 +47,62 @@ void process_gui_constraints(gui * Gui){
 				break;
 			}
 			
+			case CENTER_HORIZONTAL:{
+				Gui->TopLeftX += Gui->Parent->Width / 2 - Gui->Width / 2;
+				break;
+			}
+			
+			case CENTER_VERTICAL:{
+				Gui->TopLeftY += Gui->Parent->Height/ 2 - Gui->Height / 2;
+				break;
+			}
+			
 			case RIGHT:{
-				
+				Gui->TopLeftX = Gui->Parent->Width - Gui->Width;
 				break;
 			}
 			
 			case LEFT:{
-				
+				Gui->TopLeftX = Gui->Parent->TopLeftX;
 				break;
 			}
 			
 			case BOTTOM:{
-				
+				Gui->TopLeftY = Gui->Parent->Height - Gui->Height;
 				break;
 			}
 			
 			case MARGIN_TOP:{
+				constraint_value_type ValueType = Gui->Constraints[i].ValueType;
+				Assert(ValueType != NO_VALUE);
+				if(ValueType == FIXED_VALUE){
+					Gui->TopLeftY += Gui->Constraints[i].Value;
+				}
+				else{
+					Gui->TopLeftY += Gui->Constraints[i].Value * Gui->Height;
+				}
+				break;
+			}
+			
+			case MARGIN_LEFT:{
+				constraint_value_type ValueType = Gui->Constraints[i].ValueType;
+				Assert(ValueType != NO_VALUE);
+				if(ValueType == FIXED_VALUE){
+					Gui->TopLeftX += Gui->Constraints[i].Value;
+				}
+				else{
+					Gui->TopLeftX += Gui->Constraints[i].Value * Gui->Width;
+				}
+				break;
+			}
+			// TODO(Banni): Rethink this constraints? Are we going to change the height,
+			//and width with this constraints?
+			case MARGIN_BOTTOM:{
 				
 				break;
 			}
 			
 			case MARGIN_RIGHT:{
-				
-				break;
-			}
-			
-			case MARGIN_LEFT:{
-				
-				break;
-			}
-			
-			case MARGIN_BOTTOM:{
 				
 				break;
 			}

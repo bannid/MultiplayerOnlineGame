@@ -12,6 +12,8 @@
 enum constraint_type: uint16{
 	//Alignment
 	CENTER,
+	CENTER_HORIZONTAL,
+	CENTER_VERTICAL,
 	RIGHT,
 	LEFT,
 	BOTTOM,

@@ -181,9 +181,9 @@ int CALLBACK WinMain(HINSTANCE instance,
 					   100,
 					   FIXED_VALUE);
 	add_constraint_gui(SomeGui,
-					   CENTER,
-					   0,
-					   NO_VALUE);
+					   MARGIN_LEFT,
+					   50,
+					   FIXED_VALUE);
 	while (!glfwWindowShouldClose(Window))
 	{
 		FontDrawer.ScreenHeight = GlobalScreenHeight;
