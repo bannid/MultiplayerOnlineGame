@@ -32,13 +32,7 @@ void set_background_color_gui(gui * Gui,
 }
 
 void add_constraint_gui(gui * Gui,
-						constraint_type ConstraintType,
-						float ConstraintValue,
-						constraint_value_type ConstraintValueType){
-	constraint Constraint;
-	Constraint.Type = ConstraintType;
-	Constraint.Value = ConstraintValue;
-	Constraint.ValueType = ConstraintValueType;
+						constraint Constraint){
 	Gui->Constraints[Gui->NumberOfConstraints++] = Constraint;
 	Assert(Gui->NumberOfConstraints <= MAX_CONSTRAINTS);
 }

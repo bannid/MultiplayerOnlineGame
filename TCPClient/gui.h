@@ -64,11 +64,9 @@ void init_gui(gui * Gui,
 			  uint32 Height,
 			  uint32 Width,
 			  gui * Parent);
-
+// TODO(Banni): 
 void add_constraint_gui(gui * Gui,
-						constraint_type ConstraintType,
-						float ConstraintValue,
-						constraint_value_type ConstraintValueType);
+						constraint Constraint);
 void add_child_gui(gui * GuiParent,
 				   gui * GuiChild);
 void set_background_color_gui(gui * Gui,

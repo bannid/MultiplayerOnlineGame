@@ -1,6 +1,8 @@
 /*
 TODO List:
 -- Text rendering inside the guis.
+-- -- Scrollable chat windows will never show partial text.
+
 -- Do the font rendering using the Signed distance fields for better quality.
 -- Implement the ability to add various properties onto the guis.
 -- Add a titled gui.
@@ -181,18 +183,11 @@ int CALLBACK WinMain(HINSTANCE instance,
 			 0,
 			 0,
 			 GlobalMasterGui);
-	add_constraint_gui(PlayerListGui,
-					   HEIGHT,
-					   1.0f,
-					   RELATIVE_VALUE);
-	add_constraint_gui(PlayerListGui,
-					   WIDTH,
-					   0.3f,
-					   RELATIVE_VALUE);
-	add_constraint_gui(PlayerListGui,
-					   MARGIN_RIGHT,
-					   10,
-					   FIXED_VALUE);
+	add_constraint_gui(PlayerListGui,{HEIGHT,0.5f,RELATIVE_VALUE});
+	add_constraint_gui(PlayerListGui,{WIDTH,0.3f,RELATIVE_VALUE});
+	add_constraint_gui(PlayerListGui,{MARGIN_TOP,10,FIXED_VALUE});
+	add_constraint_gui(PlayerListGui,{MARGIN_RIGHT,10,FIXED_VALUE});
+	
 	set_background_color_gui(PlayerListGui,
 							 WHITE,
 							 0.1f);
@@ -206,7 +201,7 @@ int CALLBACK WinMain(HINSTANCE instance,
 		render_guis(GlobalMasterGui,
 					&GuiDrawer);
 		
-		float FontSize = 42.0f;
+		float FontSize = 22.0f;
 		draw_string("Hey there how are you doing? This is some text",
 					0,0,
 					&FontDrawer,
