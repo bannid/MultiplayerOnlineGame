@@ -4,6 +4,7 @@
 #include "debug.h"
 #include "colors.h"
 #include "win32_includes.h"
+#include "opengl_includes.h"
 
 #define MAX_DIRECT_CHILDREN_PER_GUI 50
 #define MAX_CONSTRAINTS 50
@@ -54,6 +55,9 @@ struct gui{
 	gui * Parent;
 	gui * Children[MAX_DIRECT_CHILDREN_PER_GUI];
 	int32 NumberOfChildren;
+	//Properties
+	color_t BackgroundColor;
+	float Alpha;
 };
 
 void init_gui(gui * Gui,
@@ -65,7 +69,10 @@ void add_constraint_gui(gui * Gui,
 						constraint_type ConstraintType,
 						float ConstraintValue,
 						constraint_value_type ConstraintValueType);
-void add_child(gui * GuiParent,
-			   gui * GuiChild);
+void add_child_gui(gui * GuiParent,
+				   gui * GuiChild);
+void set_background_color_gui(gui * Gui,
+							  color_t Color,
+							  float Alpha = 1.0f);
 
 #endif

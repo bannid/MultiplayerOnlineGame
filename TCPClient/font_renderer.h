@@ -8,5 +8,6 @@ void draw_string(const char* String,
 				 int32 X,
 				 int32 Y,
 				 draw_context * DrawContext,
+				 color_t Color = WHITE,
 				 float Size = 1.0f);
 #endif

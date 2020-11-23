@@ -95,20 +95,38 @@ void process_gui_constraints(gui * Gui){
 				}
 				break;
 			}
-			// TODO(Banni): Rethink this constraints? Are we going to change the height,
-			//and width with this constraints?
 			case MARGIN_BOTTOM:{
-				
-				break;
+				constraint_value_type ValueType = Gui->Constraints[i].ValueType;
+				Assert(ValueType != NO_VALUE);
+				float Value = Gui->Constraints[i].Value;
+				if(ValueType == FIXED_VALUE){
+					Gui->TopLeftY = Gui->Parent->Height - Gui->Height - Value;
+					break;
+				}
+				else{
+					Gui->TopLeftY = Gui->Parent->Height - Gui->Height - (Value * Gui->Height);
+				}
 			}
 			
 			case MARGIN_RIGHT:{
-				
+				constraint_value_type ValueType = Gui->Constraints[i].ValueType;
+				Assert(ValueType != NO_VALUE);
+				float Value = Gui->Constraints[i].Value;
+				if(ValueType == FIXED_VALUE){
+					Gui->TopLeftX = Gui->Parent->Width - Gui->Width - Value;
+					break;
+				}
+				else{
+					Gui->TopLeftX = Gui->Parent->Width - Gui->Width - (Value * Gui->Width);
+				}
 				break;
 			}
 			
 			case MARGIN:{
-				
+				// TODO(Banni): Maybe we should change the dimensions of this gui
+				// to put a margin acorss all the sides?
+				// TODO(Banni): Implement
+				Assert(0);
 				break;
 			}
 			
@@ -123,8 +141,10 @@ void draw_gui(gui * Gui,
 	process_gui_constraints(Gui);
 	set_vec4(&DrawContext->Shader,
 			 "Color",
-			 RED);
-	// TODO(Banni): Draw the current gui here.
+			 Gui->BackgroundColor);
+	set_float(&DrawContext->Shader,
+			  "Alpha",
+			  Gui->Alpha);
 	draw_rectangle(DrawContext,
 				   Gui->TopLeftX,
 				   Gui->TopLeftY,

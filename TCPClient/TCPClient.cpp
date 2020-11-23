@@ -97,6 +97,8 @@ bool init_glfw(GLFWwindow **Window,
 		return false;
 	}
 	glViewport(0, 0, Width, Height);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);  
 	return true;
 }
 
@@ -106,6 +108,11 @@ void render_guis(gui * MasterGui,
 		draw_gui(MasterGui->Children[i],
 				 DrawContext);
 	}
+}
+
+void gl_clear_screen(color_t Color){
+	glClearColor(Color.r, Color.g, Color.b, Color.a);
+	glClear(GL_COLOR_BUFFER_BIT);
 }
 
 int CALLBACK WinMain(HINSTANCE instance,
@@ -169,30 +176,33 @@ int CALLBACK WinMain(HINSTANCE instance,
 	GlobalMasterGui->Parent = NULL;
 	GlobalMasterGui->Height = GlobalScreenHeight;
 	GlobalMasterGui->Width = GlobalScreenWidth;
-	gui * SomeGui = get_memory_for_gui(&GlobalGuiManager);
-	add_child(GlobalMasterGui,
-			  SomeGui);
-	add_constraint_gui(SomeGui,
+	gui * PlayerListGui  = get_memory_for_gui(&GlobalGuiManager);
+	init_gui(PlayerListGui,
+			 0,
+			 0,
+			 GlobalMasterGui);
+	add_constraint_gui(PlayerListGui,
 					   HEIGHT,
-					   100,
-					   FIXED_VALUE);
-	add_constraint_gui(SomeGui,
+					   1.0f,
+					   RELATIVE_VALUE);
+	add_constraint_gui(PlayerListGui,
 					   WIDTH,
-					   100,
+					   0.3f,
+					   RELATIVE_VALUE);
+	add_constraint_gui(PlayerListGui,
+					   MARGIN_RIGHT,
+					   10,
 					   FIXED_VALUE);
-	add_constraint_gui(SomeGui,
-					   MARGIN_LEFT,
-					   50,
-					   FIXED_VALUE);
+	set_background_color_gui(PlayerListGui,
+							 WHITE,
+							 0.1f);
 	while (!glfwWindowShouldClose(Window))
 	{
 		FontDrawer.ScreenHeight = GlobalScreenHeight;
 		FontDrawer.ScreenWidth = GlobalScreenWidth;
 		GuiDrawer.ScreenWidth  = GlobalScreenWidth;
 		GuiDrawer.ScreenHeight = GlobalScreenHeight;
-		
-		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
+		gl_clear_screen(LAVENDER_BLUSH);
 		render_guis(GlobalMasterGui,
 					&GuiDrawer);
 		
@@ -200,6 +210,7 @@ int CALLBACK WinMain(HINSTANCE instance,
 		draw_string("Hey there how are you doing? This is some text",
 					0,0,
 					&FontDrawer,
+					RED,
 					FontSize);
 		glfwSwapBuffers(Window);
 		glfwPollEvents();

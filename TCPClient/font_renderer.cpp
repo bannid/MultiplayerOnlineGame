@@ -48,13 +48,14 @@ void draw_string(const char* String,
 				 int32 X,
 				 int32 Y,
 				 draw_context * DrawContext,
+				 color_t Color,
 				 float Size){
 	use_shader(DrawContext->Shader.ProgramId);
 	use_vao(DrawContext->VertexArrayObject.VAO);
 	use_texture(DrawContext->Texture.Id);
 	set_vec4(&DrawContext->Shader,
 			 "FontColor",
-			 WHITE);
+			 Color);
 	Size = (float)Size / DrawContext->CharacterSet.Size;
 	while(*String != '\0'){
 		char C = *String;
