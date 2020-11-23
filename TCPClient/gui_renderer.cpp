@@ -100,11 +100,11 @@ void process_gui_constraints(gui * Gui){
 				Assert(ValueType != NO_VALUE);
 				float Value = Gui->Constraints[i].Value;
 				if(ValueType == FIXED_VALUE){
-					Gui->TopLeftY = Gui->Parent->Height - Gui->Height - Value;
+					Gui->TopLeftY += Gui->Parent->Height - Gui->Height - Value;
 					break;
 				}
 				else{
-					Gui->TopLeftY = Gui->Parent->Height - Gui->Height - (Value * Gui->Height);
+					Gui->TopLeftY += Gui->Parent->Height - Gui->Height - (Value * Gui->Height);
 				}
 			}
 			
@@ -113,11 +113,11 @@ void process_gui_constraints(gui * Gui){
 				Assert(ValueType != NO_VALUE);
 				float Value = Gui->Constraints[i].Value;
 				if(ValueType == FIXED_VALUE){
-					Gui->TopLeftX = Gui->Parent->Width - Gui->Width - Value;
+					Gui->TopLeftX += Gui->Parent->Width - Gui->Width - Value;
 					break;
 				}
 				else{
-					Gui->TopLeftX = Gui->Parent->Width - Gui->Width - (Value * Gui->Width);
+					Gui->TopLeftX += Gui->Parent->Width - Gui->Width - (Value * Gui->Width);
 				}
 				break;
 			}

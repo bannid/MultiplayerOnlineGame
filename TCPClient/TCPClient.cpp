@@ -179,24 +179,41 @@ int CALLBACK WinMain(HINSTANCE instance,
 	GlobalMasterGui->Height = GlobalScreenHeight;
 	GlobalMasterGui->Width = GlobalScreenWidth;
 	gui * PlayerListGui  = get_memory_for_gui(&GlobalGuiManager);
+	gui * PlayerListGuiTitle = get_memory_for_gui(&GlobalGuiManager);
+	
+	
 	init_gui(PlayerListGui,
 			 0,
 			 0,
 			 GlobalMasterGui);
+	init_gui(PlayerListGuiTitle,
+			 0,
+			 0,
+			 PlayerListGui);
 	add_constraint_gui(PlayerListGui,{HEIGHT,0.5f,RELATIVE_VALUE});
 	add_constraint_gui(PlayerListGui,{WIDTH,0.3f,RELATIVE_VALUE});
 	add_constraint_gui(PlayerListGui,{MARGIN_TOP,10,FIXED_VALUE});
 	add_constraint_gui(PlayerListGui,{MARGIN_RIGHT,10,FIXED_VALUE});
 	
+	add_constraint_gui(PlayerListGuiTitle,{HEIGHT,0.1f,RELATIVE_VALUE});
+	add_constraint_gui(PlayerListGuiTitle,{WIDTH,0.9f,RELATIVE_VALUE});
+	add_constraint_gui(PlayerListGuiTitle,{MARGIN_TOP,0.5f,RELATIVE_VALUE});
+	add_constraint_gui(PlayerListGuiTitle,{MARGIN_RIGHT,0.05f,RELATIVE_VALUE});
+	
+	
 	set_background_color_gui(PlayerListGui,
 							 WHITE,
 							 0.1f);
+	set_background_color_gui(PlayerListGuiTitle,
+							 RED,
+							 0.5f);
 	while (!glfwWindowShouldClose(Window))
 	{
 		FontDrawer.ScreenHeight = GlobalScreenHeight;
 		FontDrawer.ScreenWidth = GlobalScreenWidth;
 		GuiDrawer.ScreenWidth  = GlobalScreenWidth;
 		GuiDrawer.ScreenHeight = GlobalScreenHeight;
+		
 		gl_clear_screen(LAVENDER_BLUSH);
 		render_guis(GlobalMasterGui,
 					&GuiDrawer);

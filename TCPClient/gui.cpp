@@ -24,6 +24,7 @@ void init_gui(gui * Gui,
 	Gui->NumberOfConstraints = 0;
 	Gui->NumberOfChildren = 0;
 }
+
 void set_background_color_gui(gui * Gui,
 							  color_t Color,
 							  float Alpha){
