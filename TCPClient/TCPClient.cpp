@@ -34,6 +34,8 @@ TODO List:
 #include "font_renderer.h"
 #include "gui.h"
 #include "gui_renderer.h"
+#include "label.h"
+#include "label_renderer.h"
 
 //Asset paths
 #define VERTEX_SHADER_PATH   "C:\\Users\\Winny-Banni\\source\\repos\\MultiplayerOnlineGame\\TCPClient\\VertexShader.glsl"
@@ -180,8 +182,7 @@ int CALLBACK WinMain(HINSTANCE instance,
 	GlobalMasterGui->Width = GlobalScreenWidth;
 	gui * PlayerListGui  = get_memory_for_gui(&GlobalGuiManager);
 	gui * PlayerListGuiTitle = get_memory_for_gui(&GlobalGuiManager);
-	
-	
+	label Label;
 	init_gui(PlayerListGui,
 			 0,
 			 0,
@@ -190,6 +191,14 @@ int CALLBACK WinMain(HINSTANCE instance,
 			 0,
 			 0,
 			 PlayerListGui);
+	init_label(&Label,
+			   PlayerListGuiTitle,
+			   "Player list",
+			   YELLOW,
+			   0.1f,
+			   RELATIVE_VALUE
+			   );
+	
 	add_constraint_gui(PlayerListGui,{HEIGHT,0.5f,RELATIVE_VALUE});
 	add_constraint_gui(PlayerListGui,{WIDTH,0.3f,RELATIVE_VALUE});
 	add_constraint_gui(PlayerListGui,{MARGIN_TOP,10,FIXED_VALUE});
@@ -219,11 +228,8 @@ int CALLBACK WinMain(HINSTANCE instance,
 					&GuiDrawer);
 		
 		float FontSize = 22.0f;
-		draw_string("Hey there how are you doing? This is some text",
-					0,0,
-					&FontDrawer,
-					RED,
-					FontSize);
+		draw_label(&Label,
+				   &FontDrawer);
 		glfwSwapBuffers(Window);
 		glfwPollEvents();
 	}

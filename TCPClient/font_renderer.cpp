@@ -73,3 +73,22 @@ void draw_string(const char* String,
 		X += XAdvance;
 	}
 }
+
+
+int32 get_drawn_string_width(const char * String,
+							 draw_context * DrawContext,
+							 float Size){
+	int32 Width = 0;
+	Size = (float)Size / DrawContext->CharacterSet.Size;
+	while(*String != '\0'){
+		char C = *String;
+		int32 DecimalCode = int32(C);
+		character Character = DrawContext->CharacterSet.Characters[DecimalCode];
+		int32 XAdvance = (Character.XAdvance * Size) + 0.5f;
+		int32 YOffset = (Character.YOffset * Size) + 0.5f;
+		int32 XOffset = (Character.XOffset * Size) + 0.5f;
+		String++;
+		Width += XAdvance;
+	}
+	return Width;
+}

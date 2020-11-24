@@ -10,7 +10,6 @@ typedef glm::vec4 color_t;
 #define RED                     glm::vec4(1.00f, 0.00f, 0.00f, 1.00f)
 #define LIME                    glm::vec4(0.00f, 1.00f, 0.00f, 1.00f)
 #define BLUE                    glm::vec4(0.00f, 0.00f, 1.00f, 1.00f)
-#define YELLOW                  glm::vec4(1.00f, 1.00f, 0.00f, 1.00f)
 #define CYAN_AQUA               glm::vec4(0.00f, 1.00f, 1.00f, 1.00f)
 #define MAGENTA_FUCHSIA         glm::vec4(1.00f, 0.00f, 1.00f, 1.00f)
 #define SILVER                  glm::vec4(0.75f, 0.75f, 0.75f, 1.00f)
