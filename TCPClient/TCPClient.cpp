@@ -1,8 +1,7 @@
 /*
 TODO List:
--- Text rendering inside the guis.
--- -- Scrollable chat windows will never show partial text.
-
+-- Write a property parser for guis so we dont have to compile everytime we change something
+    for guis.
 -- Do the font rendering using the Signed distance fields for better quality.
 -- Implement the ability to add various properties onto the guis.
 -- Add a titled gui.
@@ -31,6 +30,7 @@ TODO List:
 #include "heiro_font_parser.h"
 #include "colors.h"
 #include "common_client.h"
+#include "prop_processor.h"
 #include "font_renderer.h"
 #include "gui.h"
 #include "gui_renderer.h"
@@ -43,6 +43,7 @@ TODO List:
 #define FONT_FRAGMENT_SHADER_PATH "C:\\Users\\Winny-Banni\\source\\repos\\MultiplayerOnlineGame\\TCPClient\\FontFragmentShader.glsl"
 #define GUI_FRAGMENT_SHADER_PATH "C:\\Users\\Winny-Banni\\source\\repos\\MultiplayerOnlineGame\\TCPClient\\GuiFragmentShader.glsl"
 #define FONT_TEXTURE_PATH "C:\\Users\\Winny-Banni\\source\\repos\\MultiplayerOnlineGame\\res\\calibri.png"
+#define PROP_FILE_PATH "C:\\Users\\Winny-Banni\\source\\repos\\MultiplayerOnlineGame\\TCPClient\\guis_layout.prop"
 #define MAX_NUMBER_GUIS 100
 #include "gui_memory_manager.h"
 
@@ -177,17 +178,22 @@ int CALLBACK WinMain(HINSTANCE instance,
 						   GuiMemory);
 	GlobalMasterGui = get_memory_for_gui(&GlobalGuiManager);
 	//MasterGui does not have any parent.
-	GlobalMasterGui->Parent = NULL;
-	GlobalMasterGui->Height = GlobalScreenHeight;
-	GlobalMasterGui->Width = GlobalScreenWidth;
+	init_gui(GlobalMasterGui,
+			 "globalMasterGui",
+			 GlobalScreenHeight,
+			 GlobalScreenWidth,
+			 NULL);
+	
 	gui * PlayerListGui  = get_memory_for_gui(&GlobalGuiManager);
 	gui * PlayerListGuiTitle = get_memory_for_gui(&GlobalGuiManager);
 	label Label;
 	init_gui(PlayerListGui,
+			 "playerListGui",
 			 0,
 			 0,
 			 GlobalMasterGui);
 	init_gui(PlayerListGuiTitle,
+			 "playerListTitleGui",
 			 0,
 			 0,
 			 PlayerListGui);
@@ -216,6 +222,8 @@ int CALLBACK WinMain(HINSTANCE instance,
 	set_background_color_gui(PlayerListGuiTitle,
 							 RED,
 							 0.5f);
+	apply_constraints_from_prop_file(PROP_FILE_PATH,
+									 GlobalMasterGui);
 	while (!glfwWindowShouldClose(Window))
 	{
 		FontDrawer.ScreenHeight = GlobalScreenHeight;

@@ -43,6 +43,8 @@ struct constraint{
 };
 
 struct gui{
+	const char * GuiID;//This id is not unique per gui.
+	
 	int32 Height;
 	int32 Width;
 	int32 TopLeftX;
@@ -59,6 +61,7 @@ struct gui{
 };
 
 void init_gui(gui * Gui,
+			  const char * GuiID,
 			  uint32 Height,
 			  uint32 Width,
 			  gui * Parent);

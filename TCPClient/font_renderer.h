@@ -5,6 +5,12 @@
 #include "colors.h"
 #include "typedefines.h"
 
+inline void draw_char(char C,
+					  int32 TopLeftX,
+					  int32 TopLeftY,
+					  draw_context * DrawContext,
+					  float Size);
+
 void draw_string(const char* String,
 				 int32 X,
 				 int32 Y,
