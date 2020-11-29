@@ -41,8 +41,8 @@ inline int32 get_number_of_constraints(char * Ptr,
 	return NumberOfConstraints;
 }
 
-void get_next_constraint(char ** Ptr,
-                         char * Output){
+inline void get_next_constraint(char ** Ptr,
+                                char * Output){
     int32 Length = 0;
     while(**Ptr != ';'){
         *Output++ = **Ptr;
@@ -54,9 +54,9 @@ void get_next_constraint(char ** Ptr,
     *Output = '\0';
 }
 
-void get_type_and_value(char * Constraint,
-                        char * OutConstraintType,
-                        char * OutConstraintValue){
+inline void get_type_and_value(char * Constraint,
+                               char * OutConstraintType,
+                               char * OutConstraintValue){
     while(*Constraint != ':'){
         *OutConstraintType++ = *Constraint++;
     }
@@ -68,6 +68,14 @@ void get_type_and_value(char * Constraint,
     *OutConstraintValue = '\0';
 }
 
+inline bool string_ends_with(char * String,
+                             char Token){
+    while(*String != '\0'){
+        String++;
+    }
+    return *--String == Token;
+}
+
 void apply_constraints_from_prop_file(const char* FileName,
 									  gui * MasterGui){
 	win32_file PropFile;
@@ -75,28 +83,50 @@ void apply_constraints_from_prop_file(const char* FileName,
 		char * Ptr = PropFile.Data;
 		char * EndOfFilePtr = Ptr + PropFile.FileSize;
 		char GuiId[MAX_LENGTH_FOR_GUI_ID + 1];
-		eat_all_leading_white_space(&Ptr);
-		read_id(&Ptr,
-				GuiId);
-		eat_all_leading_white_space(&Ptr);
-		int32 NumberOfConstraints = get_number_of_constraints(Ptr,
-                                                              EndOfFilePtr);
-        Assert(NumberOfConstraints <= MAX_CONSTRAINTS);
-        char NextConstraint[MAX_LINE_LENGTH];
-        char ConstraintType[MAX_PROPERTY_LENGTH];
-        char ConstraintValue[MAX_PROPERTY_LENGTH];
-        for(int i = 0; i<NumberOfConstraints;i++){
-            get_next_constraint(&Ptr,
-                                NextConstraint);
-            get_type_and_value(NextConstraint,
-                               ConstraintType,
-                               ConstraintValue);
-            to_uppercase(ConstraintType);
-            char * TempConstraintType = ConstraintType;
-            char * TempConstraintValue = ConstraintValue;
-            eat_all_leading_white_space(&TempConstraintType);
-            eat_all_leading_white_space(&TempConstraintValue);
+		for(;;){
             eat_all_leading_white_space(&Ptr);
+            read_id(&Ptr,
+                    GuiId);
+            eat_all_leading_white_space(&Ptr);
+            int32 NumberOfConstraints = get_number_of_constraints(Ptr,
+                                                                  EndOfFilePtr);
+            Assert(NumberOfConstraints <= MAX_CONSTRAINTS);
+            char NextConstraint[MAX_LINE_LENGTH];
+            char ConstraintType[MAX_PROPERTY_LENGTH];
+            char ConstraintValue[MAX_PROPERTY_LENGTH];
+            for(int i = 0; i<NumberOfConstraints;i++){
+                get_next_constraint(&Ptr,
+                                    NextConstraint);
+                get_type_and_value(NextConstraint,
+                                   ConstraintType,
+                                   ConstraintValue);
+                to_uppercase(ConstraintType);
+                char * TempConstraintType = ConstraintType;
+                char * TempConstraintValue = ConstraintValue;
+                eat_all_leading_white_space(&TempConstraintType);
+                eat_all_leading_white_space(&TempConstraintValue);
+                eat_all_leading_white_space(&Ptr);
+                Ptr++;
+                if(compare_strings(TempConstraintType,"CENTER")){
+                    
+                }
+                else if(compare_strings(TempConstraintType,"HEIGHT")){
+                    bool IsRelativeValue = string_ends_with(TempConstraintValue,'%');
+                    float Value = strtof(TempConstraintValue,NULL);
+                    if(IsRelativeValue){
+                        
+                    }
+                    else{
+                        
+                    }
+                    
+                }
+            }
+            //Eat the '}' closing bracket
+            Ptr++;
+            if(Ptr >= EndOfFilePtr){
+                break;
+            }
         }
 		close_file(&PropFile);
 	}
