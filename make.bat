@@ -13,8 +13,8 @@ rem ClientIncludes
 set ServerFiles=..\TCPServer\*.cpp ..\common\*.cpp
 set ClientFiles=..\TCPClient\*.cpp ..\TCPClient\glad.c ..\common\*.cpp
 set CommonIncludes=/I ..\common
-set ClientIncludes=/I C:\Users\Winny-Banni\Desktop\Libs\include
-set ClientLibsPath=/LIBPATH:"C:\Users\Winny-Banni\Desktop\Libs\lib\"
+set ClientIncludes=/I ..\Libs\include
+set ClientLibsPath=/LIBPATH:"..\Libs\lib\"
 set ClientLibs=kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib opengl32.lib glfw3.lib
 set CommonLibs=Ws2_32.lib
 

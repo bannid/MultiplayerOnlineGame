@@ -38,12 +38,13 @@ TODO List:
 #include "label_renderer.h"
 
 //Asset paths
-#define VERTEX_SHADER_PATH   "C:\\Users\\Winny-Banni\\source\\repos\\MultiplayerOnlineGame\\TCPClient\\VertexShader.glsl"
-#define FRAGMENT_SHADER_PATH "C:\\Users\\Winny-Banni\\source\\repos\\MultiplayerOnlineGame\\TCPClient\\SpriteFragmentShader.glsl"
-#define FONT_FRAGMENT_SHADER_PATH "C:\\Users\\Winny-Banni\\source\\repos\\MultiplayerOnlineGame\\TCPClient\\FontFragmentShader.glsl"
-#define GUI_FRAGMENT_SHADER_PATH "C:\\Users\\Winny-Banni\\source\\repos\\MultiplayerOnlineGame\\TCPClient\\GuiFragmentShader.glsl"
-#define FONT_TEXTURE_PATH "C:\\Users\\Winny-Banni\\source\\repos\\MultiplayerOnlineGame\\res\\calibri.png"
-#define PROP_FILE_PATH "C:\\Users\\Winny-Banni\\source\\repos\\MultiplayerOnlineGame\\TCPClient\\guis_layout.prop"
+#define VERTEX_SHADER_PATH        "..\\TCPClient\\VertexShader.glsl"
+#define FRAGMENT_SHADER_PATH      "..\\TCPClient\\SpriteFragmentShader.glsl"
+#define FONT_FRAGMENT_SHADER_PATH "..\\TCPClient\\FontFragmentShader.glsl"
+#define GUI_FRAGMENT_SHADER_PATH  "..\\TCPClient\\GuiFragmentShader.glsl"
+#define FONT_TEXTURE_PATH         "..\\res\\calibri.png"
+#define PROP_FILE_PATH            "..\\TCPClient\\guis_layout.prop"
+#define FONT_FILE_PATH            "..\\res\\calibri.fnt"
 #define MAX_NUMBER_GUIS 100
 #include "gui_memory_manager.h"
 
@@ -135,7 +136,7 @@ int CALLBACK WinMain(HINSTANCE instance,
 	draw_context FontDrawer;
 	draw_context GuiDrawer;
 	
-	if(!parse_font_file("C:\\Users\\Winny-Banni\\source\\repos\\MultiplayerOnlineGame\\res\\calibri.fnt",
+	if(!parse_font_file(FONT_FILE_PATH,
 						&FontDrawer.CharacterSet)){
 		OutputDebugStringA("Failed to load the character set info!");
 		return -1;
