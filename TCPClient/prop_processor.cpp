@@ -4,7 +4,7 @@
 #define MAX_LINE_LENGTH 30
 #define MAX_PROPERTY_LENGTH 30
 
-inline void eat_all_white_space(char ** Ptr){
+inline void eat_all_leading_white_space(char ** Ptr){
 	while(**Ptr == '\t' ||
 		  **Ptr == '\n' ||
 		  **Ptr == '\r' ||
@@ -41,14 +41,16 @@ inline int32 get_number_of_constraints(char * Ptr,
 	return NumberOfConstraints;
 }
 
-void get_next_constraint(char * Ptr,
+void get_next_constraint(char ** Ptr,
                          char * Output){
     int32 Length = 0;
-    while(*Ptr != ';'){
-        *Output++ = *Ptr++;
+    while(**Ptr != ';'){
+        *Output++ = **Ptr;
+        *Ptr+=1;
         Length++;
         Assert(Length < MAX_LINE_LENGTH);
     }
+    *Ptr+=1;
     *Output = '\0';
 }
 
@@ -70,25 +72,32 @@ void apply_constraints_from_prop_file(const char* FileName,
 									  gui * MasterGui){
 	win32_file PropFile;
 	if(read_entire_file(FileName, &PropFile)){
-		
 		char * Ptr = PropFile.Data;
 		char * EndOfFilePtr = Ptr + PropFile.FileSize;
 		char GuiId[MAX_LENGTH_FOR_GUI_ID + 1];
-		eat_all_white_space(&Ptr);
+		eat_all_leading_white_space(&Ptr);
 		read_id(&Ptr,
 				GuiId);
-		eat_all_white_space(&Ptr);
+		eat_all_leading_white_space(&Ptr);
 		int32 NumberOfConstraints = get_number_of_constraints(Ptr,
                                                               EndOfFilePtr);
+        Assert(NumberOfConstraints <= MAX_CONSTRAINTS);
         char NextConstraint[MAX_LINE_LENGTH];
         char ConstraintType[MAX_PROPERTY_LENGTH];
         char ConstraintValue[MAX_PROPERTY_LENGTH];
-        get_next_constraint(Ptr,
-                            NextConstraint);
-        get_type_and_value(NextConstraint,
-                           ConstraintType,
-                           ConstraintValue);
-        Assert(NumberOfConstraints <= MAX_CONSTRAINTS);
+        for(int i = 0; i<NumberOfConstraints;i++){
+            get_next_constraint(&Ptr,
+                                NextConstraint);
+            get_type_and_value(NextConstraint,
+                               ConstraintType,
+                               ConstraintValue);
+            to_uppercase(ConstraintType);
+            char * TempConstraintType = ConstraintType;
+            char * TempConstraintValue = ConstraintValue;
+            eat_all_leading_white_space(&TempConstraintType);
+            eat_all_leading_white_space(&TempConstraintValue);
+            eat_all_leading_white_space(&Ptr);
+        }
 		close_file(&PropFile);
 	}
 	else{

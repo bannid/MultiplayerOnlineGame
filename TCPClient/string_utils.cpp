@@ -23,3 +23,13 @@ bool compare_strings(char * StringFirst,
     }
     return true;
 }
+
+void to_uppercase(char * String){
+    while(*String != '\0'){
+        int32 DecimalCode = (int32)*String;
+        if(DecimalCode >= 97 && DecimalCode <= 122){
+            *String = (char)(DecimalCode - 32);
+        }
+        String++;
+    }
+}

@@ -8,7 +8,6 @@
 
 #define MAX_DIRECT_CHILDREN_PER_GUI 50
 #define MAX_CONSTRAINTS 50
-#define NOT_APPLICABLE  0xFFFFFFFF
 
 enum constraint_type: uint16{
 	//Alignment
