@@ -47,33 +47,6 @@ void parse_attribute(char * Word,
 	Assert(Size <= MAX_WORD_SIZE);
 }
 
-bool compare_strings(const char* First,
-					 const char* Second){
-	uint32 FirstLength = 0;
-	uint32 SecondLength = 0;
-	while(*First != '\0'){
-		FirstLength++;
-		First++;
-	}
-	while(*Second != '\0'){
-		SecondLength++;
-		Second++;
-	}
-	if(FirstLength != SecondLength){
-		return false;
-	}
-	First -= FirstLength;
-	Second -= SecondLength;
-	for(int i = 0; i< FirstLength; i++){
-		if(*First != *Second){
-			return false;
-		}
-		First++;
-		Second++;
-	}
-	return true;
-}
-
 void copy_filename_face(char * Source,
 						char * Destination){
 	int32 Size = 0;

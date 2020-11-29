@@ -45,6 +45,7 @@ TODO List:
 #define FONT_TEXTURE_PATH         "..\\res\\calibri.png"
 #define PROP_FILE_PATH            "..\\TCPClient\\guis_layout.prop"
 #define FONT_FILE_PATH            "..\\res\\calibri.fnt"
+
 #define MAX_NUMBER_GUIS 100
 #include "gui_memory_manager.h"
 

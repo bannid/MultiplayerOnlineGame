@@ -3,6 +3,7 @@
 #include "win32_includes.h"
 #include "typedefines.h"
 #include "win32_fileapi.h"
+#include "string_utils.h"
 #include "debug.h"
 #include <stdlib.h>
 
