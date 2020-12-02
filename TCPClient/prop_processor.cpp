@@ -78,6 +78,11 @@ inline bool string_ends_with(char * String,
 
 void apply_constraints_from_prop_file(const char* FileName,
 									  gui_manager * GuiManager){
+    //First we clear all the constraints from all the guis.
+    for(int j = 0; j<GuiManager->NumberOfGuis;j++){
+        gui * Gui = GuiManager->GuisMemory + j;
+        Gui->NumberOfConstraints = 0;
+    }
 	win32_file PropFile;
 	if(read_entire_file(FileName, &PropFile)){
 		char * Ptr = PropFile.Data;

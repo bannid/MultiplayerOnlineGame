@@ -2,6 +2,7 @@
 TODO List:
 -- Write a property parser for guis so we dont have to compile everytime we change something
     for guis.
+-- Lock the frame rate to 60 frames per second.
 -- Do the font rendering using the Signed distance fields for better quality.
 -- Implement the ability to add various properties onto the guis.
 -- Add a titled gui.
@@ -52,8 +53,6 @@ TODO List:
 static int GlobalScreenWidth;
 static int GlobalScreenHeight;
 
-static character_set GlobalCharacterSet;
-static gui_manager GlobalGuiMemoryManager;
 static gui * GlobalMasterGui;
 
 bool connect_to_server(client *Client) {
@@ -127,8 +126,6 @@ int CALLBACK WinMain(HINSTANCE instance,
 					 HINSTANCE prevInstance,
 					 LPSTR commandLine,
 					 int showCode) {
-	
-#if 1	
 	GLFWwindow * Window;
 	if(!init_glfw(&Window,
 				  "Networking game")){
@@ -137,7 +134,7 @@ int CALLBACK WinMain(HINSTANCE instance,
 	}
 	draw_context FontDrawer;
 	draw_context GuiDrawer;
-	
+	gui_manager GuiMemoryManager;
 	if(!parse_font_file(FONT_FILE_PATH,
 						&FontDrawer.CharacterSet)){
 		OutputDebugStringA("Failed to load the character set info!");
@@ -177,9 +174,9 @@ int CALLBACK WinMain(HINSTANCE instance,
                                           MAX_NUMBER_GUIS * sizeof(gui),
                                           MEM_COMMIT,
                                           PAGE_READWRITE);
-    initialize_gui_manager(&GlobalGuiMemoryManager,
+    initialize_gui_manager(&GuiMemoryManager,
                            GuisMemory);
-	GlobalMasterGui = get_memory_for_gui(&GlobalGuiMemoryManager);
+	GlobalMasterGui = get_memory_for_gui(&GuiMemoryManager);
 	//MasterGui does not have any parent.
 	init_gui(GlobalMasterGui,
 			 "globalMasterGui",
@@ -187,8 +184,8 @@ int CALLBACK WinMain(HINSTANCE instance,
 			 GlobalScreenWidth,
 			 NULL);
 	
-	gui * PlayerListGui  = get_memory_for_gui(&GlobalGuiMemoryManager);
-	gui * PlayerListGuiTitle = get_memory_for_gui(&GlobalGuiMemoryManager);
+	gui * PlayerListGui  = get_memory_for_gui(&GuiMemoryManager);
+	gui * PlayerListGuiTitle = get_memory_for_gui(&GuiMemoryManager);
 	label Label;
 	init_gui(PlayerListGui,
 			 "playerListGui",
@@ -214,14 +211,17 @@ int CALLBACK WinMain(HINSTANCE instance,
 							 RED,
 							 0.5f);
 	apply_constraints_from_prop_file(PROP_FILE_PATH,
-									 &GlobalGuiMemoryManager);
+									 &GuiMemoryManager);
 	while (!glfwWindowShouldClose(Window))
 	{
 		FontDrawer.ScreenHeight = GlobalScreenHeight;
 		FontDrawer.ScreenWidth = GlobalScreenWidth;
 		GuiDrawer.ScreenWidth  = GlobalScreenWidth;
 		GuiDrawer.ScreenHeight = GlobalScreenHeight;
-		
+		if(glfwGetKey(Window,GLFW_KEY_M) == GLFW_PRESS){
+            apply_constraints_from_prop_file(PROP_FILE_PATH,
+                                             &GuiMemoryManager);
+        }
 		gl_clear_screen(LAVENDER_BLUSH);
 		render_guis(GlobalMasterGui,
 					&GuiDrawer);
@@ -233,6 +233,5 @@ int CALLBACK WinMain(HINSTANCE instance,
 		glfwPollEvents();
 	}
 	glfwTerminate();
-#endif
 	return 0;
 }
