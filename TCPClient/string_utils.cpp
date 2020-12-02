@@ -1,6 +1,6 @@
 #include "string_utils.h"
 
-int32 string_length(char * String){
+int32 string_length(const char * String){
     int32 StringLength = 0;
     while(*String != '\0'){
         StringLength++;
@@ -9,8 +9,8 @@ int32 string_length(char * String){
     return StringLength;
 }
 
-bool compare_strings(char * StringFirst,
-                     char * StringSecond){
+bool compare_strings(const char * StringFirst,
+                     const char * StringSecond){
     if(string_length(StringFirst) != string_length(StringSecond)){
         return false;
     }

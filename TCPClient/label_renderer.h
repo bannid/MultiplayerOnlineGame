@@ -6,6 +6,7 @@
 #include "colors.h"
 #include "common_client.h"
 #include "typedefines.h"
+#include "string_utils.h"
 
 void draw_label(label * Label,
 				draw_context * DrawContext);

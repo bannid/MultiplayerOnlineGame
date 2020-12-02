@@ -1,6 +1,6 @@
 #include "prop_processor.h"
 
-#define MAX_LENGTH_FOR_GUI_ID 50
+#define MAX_LENGTH_FOR_GUI_SELECTOR 50
 #define MAX_LINE_LENGTH 30
 #define MAX_PROPERTY_LENGTH 30
 
@@ -16,15 +16,15 @@ inline void eat_all_leading_white_space(char ** Ptr){
 }
 
 inline void read_id(char ** Ptr,
-					char * GuiId){
+					char * GuiSelector){
 	int32 Size = 0;
 	while(**Ptr != '{'){
-		GuiId[Size++] = **Ptr;
+		GuiSelector[Size++] = **Ptr;
 		*Ptr+=1;
-		Assert(Size <= MAX_LENGTH_FOR_GUI_ID);
+		Assert(Size <= MAX_LENGTH_FOR_GUI_SELECTOR);
 	}
 	*Ptr+=1;
-	GuiId[Size] = '\0';
+	GuiSelector[Size] = '\0';
 }
 
 inline int32 get_number_of_constraints(char * Ptr,
@@ -77,16 +77,19 @@ inline bool string_ends_with(char * String,
 }
 
 void apply_constraints_from_prop_file(const char* FileName,
-									  gui * MasterGui){
+									  gui_manager * GuiManager){
 	win32_file PropFile;
 	if(read_entire_file(FileName, &PropFile)){
 		char * Ptr = PropFile.Data;
 		char * EndOfFilePtr = Ptr + PropFile.FileSize;
-		char GuiId[MAX_LENGTH_FOR_GUI_ID + 1];
+		char GuiSelector[MAX_LENGTH_FOR_GUI_SELECTOR + 1];
 		for(;;){
             eat_all_leading_white_space(&Ptr);
+            if(Ptr >= EndOfFilePtr){
+                break;
+            }
             read_id(&Ptr,
-                    GuiId);
+                    GuiSelector);
             eat_all_leading_white_space(&Ptr);
             int32 NumberOfConstraints = get_number_of_constraints(Ptr,
                                                                   EndOfFilePtr);
@@ -106,27 +109,64 @@ void apply_constraints_from_prop_file(const char* FileName,
                 eat_all_leading_white_space(&TempConstraintType);
                 eat_all_leading_white_space(&TempConstraintValue);
                 eat_all_leading_white_space(&Ptr);
-                Ptr++;
                 if(compare_strings(TempConstraintType,"CENTER")){
                     
                 }
                 else if(compare_strings(TempConstraintType,"HEIGHT")){
                     bool IsRelativeValue = string_ends_with(TempConstraintValue,'%');
                     float Value = strtof(TempConstraintValue,NULL);
-                    if(IsRelativeValue){
-                        
+                    constraint_value_type ValueType;
+                    ValueType = IsRelativeValue ? RELATIVE_VALUE : FIXED_VALUE;
+                    for(int j = 0; j<GuiManager->NumberOfGuis;j++){
+                        gui * Gui = GuiManager->GuisMemory + j;
+                        if(compare_strings(Gui->Selector,(const char*)GuiSelector)){
+                            add_constraint_gui(Gui,{HEIGHT,Value,ValueType});
+                        }
                     }
-                    else{
-                        
+                    
+                }
+                else if(compare_strings(TempConstraintType,"WIDTH")){
+                    bool IsRelativeValue = string_ends_with(TempConstraintValue,'%');
+                    float Value = strtof(TempConstraintValue,NULL);
+                    constraint_value_type ValueType;
+                    ValueType = IsRelativeValue ? RELATIVE_VALUE : FIXED_VALUE;
+                    for(int j = 0; j<GuiManager->NumberOfGuis;j++){
+                        gui * Gui = GuiManager->GuisMemory + j;
+                        if(compare_strings(Gui->Selector,(const char*)GuiSelector)){
+                            add_constraint_gui(Gui,{WIDTH,Value,ValueType});
+                        }
+                    }
+                    
+                }
+                else if(compare_strings(TempConstraintType,"MARGIN_TOP")){
+                    bool IsRelativeValue = string_ends_with(TempConstraintValue,'%');
+                    float Value = strtof(TempConstraintValue,NULL);
+                    constraint_value_type ValueType;
+                    ValueType = IsRelativeValue ? RELATIVE_VALUE : FIXED_VALUE;
+                    for(int j = 0; j<GuiManager->NumberOfGuis;j++){
+                        gui * Gui = GuiManager->GuisMemory + j;
+                        if(compare_strings(Gui->Selector,(const char*)GuiSelector)){
+                            add_constraint_gui(Gui,{MARGIN_TOP,Value,ValueType});
+                        }
+                    }
+                    
+                }
+                else if(compare_strings(TempConstraintType,"MARGIN_RIGHT")){
+                    bool IsRelativeValue = string_ends_with(TempConstraintValue,'%');
+                    float Value = strtof(TempConstraintValue,NULL);
+                    constraint_value_type ValueType;
+                    ValueType = IsRelativeValue ? RELATIVE_VALUE : FIXED_VALUE;
+                    for(int j = 0; j<GuiManager->NumberOfGuis;j++){
+                        gui * Gui = GuiManager->GuisMemory + j;
+                        if(compare_strings(Gui->Selector,(const char*)GuiSelector)){
+                            add_constraint_gui(Gui,{MARGIN_RIGHT,Value,ValueType});
+                        }
                     }
                     
                 }
             }
             //Eat the '}' closing bracket
             Ptr++;
-            if(Ptr >= EndOfFilePtr){
-                break;
-            }
         }
 		close_file(&PropFile);
 	}

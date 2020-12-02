@@ -9,7 +9,8 @@ void initialize_gui_manager(gui_manager * GuiManager,
 }
 gui * get_memory_for_gui(gui_manager * GuiManager){
 	Assert(GuiManager->NumberOfGuis < MAX_NUMBER_GUIS);
-	return GuiManager->GuisMemory + GuiManager->NumberOfGuis++;
+    gui * PointerToReturn =  GuiManager->GuisMemory + GuiManager->NumberOfGuis++;
+    return PointerToReturn;
 }
 void free_gui_memory(gui*){
 	// TODO(Banni): 

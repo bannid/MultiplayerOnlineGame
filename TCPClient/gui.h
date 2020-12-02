@@ -42,7 +42,7 @@ struct constraint{
 };
 
 struct gui{
-	const char * GuiID;//This id is not unique per gui.
+	const char * Selector;
 	
 	int32 Height;
 	int32 Width;

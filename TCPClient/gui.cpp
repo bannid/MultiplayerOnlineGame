@@ -5,11 +5,11 @@
 static bool MasterGUIInitialized = false;
 
 void init_gui(gui * Gui,
-			  const char * GuiID,
+			  const char * GuiSelector,
 			  uint32 Height,
 			  uint32 Width,
 			  gui * Parent){
-	Gui->GuiID = GuiID;
+	Gui->Selector = GuiSelector;
 	Gui->Height = Height;
 	Gui->Width = Width;
 	Gui->BackgroundColor = WHITE;

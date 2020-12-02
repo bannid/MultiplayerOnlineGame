@@ -12,7 +12,6 @@ struct gui_manager{
 	gui * GuisMemory;
 	int32 NumberOfGuis;
 };
-
 void initialize_gui_manager(gui_manager * GuiManager,
 							gui * GuisMemory);
 gui * get_memory_for_gui(gui_manager * GuiManager);

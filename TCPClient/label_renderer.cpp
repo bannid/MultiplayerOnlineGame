@@ -1,14 +1,5 @@
 #include "label_renderer.h"
 
-int32 string_length(const char * String){
-	int32 Length = 0;
-	while(*String != '\0'){
-		String++;
-		Length++;
-	}
-	return Length;
-}
-
 void draw_label(label * Label,
 				draw_context * DrawContext){
 	float Size;

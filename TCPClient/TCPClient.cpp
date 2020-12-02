@@ -20,6 +20,8 @@ TODO List:
  3. Assets to c code converter to pack all the resources in single exe.
  4. Sound.
 */
+#define MAX_NUMBER_GUIS 100
+
 #include "win32_includes.h"
 #include "opengl_includes.h"
 #include "shadernew.h"
@@ -32,6 +34,7 @@ TODO List:
 #include "common_client.h"
 #include "prop_processor.h"
 #include "font_renderer.h"
+#include "gui_memory_manager.h"
 #include "gui.h"
 #include "gui_renderer.h"
 #include "label.h"
@@ -46,13 +49,11 @@ TODO List:
 #define PROP_FILE_PATH            "..\\TCPClient\\guis_layout.prop"
 #define FONT_FILE_PATH            "..\\res\\calibri.fnt"
 
-#define MAX_NUMBER_GUIS 100
-#include "gui_memory_manager.h"
-
 static int GlobalScreenWidth;
 static int GlobalScreenHeight;
+
 static character_set GlobalCharacterSet;
-static gui_manager GlobalGuiManager;
+static gui_manager GlobalGuiMemoryManager;
 static gui * GlobalMasterGui;
 
 bool connect_to_server(client *Client) {
@@ -172,13 +173,13 @@ int CALLBACK WinMain(HINSTANCE instance,
 	initialize_vao(&GuiDrawer.VertexArrayObject);
 	
 	int32 SizeOfMemory = MAX_NUMBER_GUIS * sizeof(gui);
-	gui * GuiMemory = (gui*)VirtualAlloc(NULL,
-										 MAX_NUMBER_GUIS * sizeof(gui),
-										 MEM_COMMIT,
-										 PAGE_READWRITE);
-	initialize_gui_manager(&GlobalGuiManager,
-						   GuiMemory);
-	GlobalMasterGui = get_memory_for_gui(&GlobalGuiManager);
+    gui * GuisMemory = (gui*)VirtualAlloc(NULL,
+                                          MAX_NUMBER_GUIS * sizeof(gui),
+                                          MEM_COMMIT,
+                                          PAGE_READWRITE);
+    initialize_gui_manager(&GlobalGuiMemoryManager,
+                           GuisMemory);
+	GlobalMasterGui = get_memory_for_gui(&GlobalGuiMemoryManager);
 	//MasterGui does not have any parent.
 	init_gui(GlobalMasterGui,
 			 "globalMasterGui",
@@ -186,8 +187,8 @@ int CALLBACK WinMain(HINSTANCE instance,
 			 GlobalScreenWidth,
 			 NULL);
 	
-	gui * PlayerListGui  = get_memory_for_gui(&GlobalGuiManager);
-	gui * PlayerListGuiTitle = get_memory_for_gui(&GlobalGuiManager);
+	gui * PlayerListGui  = get_memory_for_gui(&GlobalGuiMemoryManager);
+	gui * PlayerListGuiTitle = get_memory_for_gui(&GlobalGuiMemoryManager);
 	label Label;
 	init_gui(PlayerListGui,
 			 "playerListGui",
@@ -206,18 +207,6 @@ int CALLBACK WinMain(HINSTANCE instance,
 			   0.1f,
 			   RELATIVE_VALUE
 			   );
-	
-	add_constraint_gui(PlayerListGui,{HEIGHT,0.5f,RELATIVE_VALUE});
-	add_constraint_gui(PlayerListGui,{WIDTH,0.3f,RELATIVE_VALUE});
-	add_constraint_gui(PlayerListGui,{MARGIN_TOP,10,FIXED_VALUE});
-	add_constraint_gui(PlayerListGui,{MARGIN_RIGHT,10,FIXED_VALUE});
-	
-	add_constraint_gui(PlayerListGuiTitle,{HEIGHT,0.1f,RELATIVE_VALUE});
-	add_constraint_gui(PlayerListGuiTitle,{WIDTH,0.9f,RELATIVE_VALUE});
-	add_constraint_gui(PlayerListGuiTitle,{MARGIN_TOP,0.5f,RELATIVE_VALUE});
-	add_constraint_gui(PlayerListGuiTitle,{MARGIN_RIGHT,0.05f,RELATIVE_VALUE});
-	
-	
 	set_background_color_gui(PlayerListGui,
 							 WHITE,
 							 0.1f);
@@ -225,7 +214,7 @@ int CALLBACK WinMain(HINSTANCE instance,
 							 RED,
 							 0.5f);
 	apply_constraints_from_prop_file(PROP_FILE_PATH,
-									 GlobalMasterGui);
+									 &GlobalGuiMemoryManager);
 	while (!glfwWindowShouldClose(Window))
 	{
 		FontDrawer.ScreenHeight = GlobalScreenHeight;
