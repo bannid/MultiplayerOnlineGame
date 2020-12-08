@@ -114,60 +114,35 @@ void apply_constraints_from_prop_file(const char* FileName,
                 eat_all_leading_white_space(&TempConstraintType);
                 eat_all_leading_white_space(&TempConstraintValue);
                 eat_all_leading_white_space(&Ptr);
+                
+                constraint_type ConstraintType;
+                constraint_value_type ValueType;
+                float Value;
+                bool IsRelativeValue = string_ends_with(TempConstraintValue,'%');
+                Value = strtof(TempConstraintValue,NULL);
+                ValueType = IsRelativeValue ? RELATIVE_VALUE : FIXED_VALUE;
+                
+                // TODO(NAME): Maybe do this code by introspection
                 if(compare_strings(TempConstraintType,"CENTER")){
-                    
+                    ConstraintType = CENTER;
                 }
                 else if(compare_strings(TempConstraintType,"HEIGHT")){
-                    bool IsRelativeValue = string_ends_with(TempConstraintValue,'%');
-                    float Value = strtof(TempConstraintValue,NULL);
-                    constraint_value_type ValueType;
-                    ValueType = IsRelativeValue ? RELATIVE_VALUE : FIXED_VALUE;
-                    for(int j = 0; j<GuiManager->NumberOfGuis;j++){
-                        gui * Gui = GuiManager->GuisMemory + j;
-                        if(compare_strings(Gui->Selector,(const char*)GuiSelector)){
-                            add_constraint_gui(Gui,{HEIGHT,Value,ValueType});
-                        }
-                    }
-                    
+                    ConstraintType = HEIGHT;
                 }
                 else if(compare_strings(TempConstraintType,"WIDTH")){
-                    bool IsRelativeValue = string_ends_with(TempConstraintValue,'%');
-                    float Value = strtof(TempConstraintValue,NULL);
-                    constraint_value_type ValueType;
-                    ValueType = IsRelativeValue ? RELATIVE_VALUE : FIXED_VALUE;
-                    for(int j = 0; j<GuiManager->NumberOfGuis;j++){
-                        gui * Gui = GuiManager->GuisMemory + j;
-                        if(compare_strings(Gui->Selector,(const char*)GuiSelector)){
-                            add_constraint_gui(Gui,{WIDTH,Value,ValueType});
-                        }
-                    }
-                    
+                    ConstraintType = WIDTH;
                 }
                 else if(compare_strings(TempConstraintType,"MARGIN_TOP")){
-                    bool IsRelativeValue = string_ends_with(TempConstraintValue,'%');
-                    float Value = strtof(TempConstraintValue,NULL);
-                    constraint_value_type ValueType;
-                    ValueType = IsRelativeValue ? RELATIVE_VALUE : FIXED_VALUE;
-                    for(int j = 0; j<GuiManager->NumberOfGuis;j++){
-                        gui * Gui = GuiManager->GuisMemory + j;
-                        if(compare_strings(Gui->Selector,(const char*)GuiSelector)){
-                            add_constraint_gui(Gui,{MARGIN_TOP,Value,ValueType});
-                        }
-                    }
-                    
+                    ConstraintType = MARGIN_TOP;
                 }
                 else if(compare_strings(TempConstraintType,"MARGIN_RIGHT")){
-                    bool IsRelativeValue = string_ends_with(TempConstraintValue,'%');
-                    float Value = strtof(TempConstraintValue,NULL);
-                    constraint_value_type ValueType;
-                    ValueType = IsRelativeValue ? RELATIVE_VALUE : FIXED_VALUE;
-                    for(int j = 0; j<GuiManager->NumberOfGuis;j++){
-                        gui * Gui = GuiManager->GuisMemory + j;
-                        if(compare_strings(Gui->Selector,(const char*)GuiSelector)){
-                            add_constraint_gui(Gui,{MARGIN_RIGHT,Value,ValueType});
-                        }
+                    ConstraintType = MARGIN_RIGHT;
+                }
+                for(int j = 0; j<GuiManager->NumberOfGuis;j++){
+                    gui * Gui = GuiManager->GuisMemory + j;
+                    if(compare_strings(Gui->Selector,(const char*)GuiSelector)){
+                        add_constraint_gui(Gui,{ConstraintType,Value,ValueType});
                     }
-                    
                 }
             }
             //Eat the '}' closing bracket

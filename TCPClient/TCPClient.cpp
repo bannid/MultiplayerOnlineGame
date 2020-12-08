@@ -1,7 +1,5 @@
 /*
 TODO List:
--- Write a property parser for guis so we dont have to compile everytime we change something
-    for guis.
 -- Lock the frame rate to 60 frames per second.
 -- Do the font rendering using the Signed distance fields for better quality.
 -- Implement the ability to add various properties onto the guis.
