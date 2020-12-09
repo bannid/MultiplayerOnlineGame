@@ -10,3 +10,9 @@ playerListTitleGui{
 	margin_top:10px;
 	margin_right:0.05%;
 }
+frameRateGui{
+	height: 50px;
+	width:  300px;
+	margin_top:0px;
+	margin_left:0px;
+}

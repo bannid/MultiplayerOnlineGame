@@ -9,5 +9,6 @@ int32 string_length(const char * String);
 void to_uppercase(char * String);
 bool string_contains(const char * String,
                      char * Pattern);
-
+void copy_string(const char * Source,
+                 char * Destination);
 #endif

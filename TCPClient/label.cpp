@@ -9,7 +9,9 @@ void init_label(label * Label,
 				constraint_value_type SizeType){
 	Assert(SizeType != NO_VALUE);
 	Assert(ContainerGui != NULL);
-	Label->String = String;
+    Assert(string_length(String) < MAX_LABEL_SIZE);
+    copy_string((const char*)String,
+                Label->String);
 	Label->Size = Size;
 	Label->SizeType = SizeType;
 	Label->ContainerGui = ContainerGui;

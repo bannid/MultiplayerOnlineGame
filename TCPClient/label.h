@@ -2,9 +2,11 @@
 #define LABEL_H
 #include "gui.h"
 #include "colors.h"
+#include "string_utils.h"
 
+#define MAX_LABEL_SIZE 100
 struct label{
-	char * String;
+	char String[MAX_LABEL_SIZE + 1];
 	gui * ContainerGui;
 	float Size;
 	constraint_value_type SizeType;

@@ -138,6 +138,9 @@ void apply_constraints_from_prop_file(const char* FileName,
                 else if(compare_strings(TempConstraintType,"MARGIN_RIGHT")){
                     ConstraintType = MARGIN_RIGHT;
                 }
+                else if(compare_strings(TempConstraintType,"MARGIN_LEFT")){
+                    ConstraintType = MARGIN_LEFT;
+                }
                 for(int j = 0; j<GuiManager->NumberOfGuis;j++){
                     gui * Gui = GuiManager->GuisMemory + j;
                     if(compare_strings(Gui->Selector,(const char*)GuiSelector)){

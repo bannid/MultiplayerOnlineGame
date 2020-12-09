@@ -14,9 +14,17 @@ void draw_label(label * Label,
 											  Size);
 	int32 TopLeftX = Label->ContainerGui->TopLeftX;
 	int32 TopLeftY = Label->ContainerGui->TopLeftY;
-	if(Label->Alignment == CENTER_HORIZONTAL){
-		TopLeftX += TotalWidth / 2;
-	}
+    switch(Label->Alignment){
+        case CENTER_HORIZONTAL:{
+            float Padding = (Label->ContainerGui->Width - TotalWidth) / 2.0f;
+            TopLeftX += Padding;
+            break;
+        }
+        case LEFT:{
+            //Do nothing.
+            break;
+        }
+    }
 	draw_string(Label->String,
 				TopLeftX,
 				TopLeftY,

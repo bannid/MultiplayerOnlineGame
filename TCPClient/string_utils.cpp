@@ -33,3 +33,12 @@ void to_uppercase(char * String){
         String++;
     }
 }
+
+
+void copy_string(const char * Source,
+                 char * Destination){
+    while(*Source != '\0'){
+        *Destination++ = *Source++;
+    }
+    *Destination = '\0';
+}

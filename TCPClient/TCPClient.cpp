@@ -1,6 +1,5 @@
 /*
 TODO List:
--- Lock the frame rate to 60 frames per second.
 -- Do the font rendering using the Signed distance fields for better quality.
 -- Implement the ability to add various properties onto the guis.
 -- Add a titled gui.
@@ -38,6 +37,8 @@ TODO List:
 #include "gui_renderer.h"
 #include "label.h"
 #include "label_renderer.h"
+#include "wgl.h"
+#include <stdio.h>
 
 //Asset paths
 #define VERTEX_SHADER_PATH        "..\\TCPClient\\VertexShader.glsl"
@@ -120,11 +121,42 @@ void gl_clear_screen(color_t Color){
 	glClear(GL_COLOR_BUFFER_BIT);
 }
 
+bool WGLExtensionSupported(const char *extension_name) {
+    PFNWGLGETEXTENSIONSSTRINGEXTPROC _wglGetExtensionsStringEXT = NULL;
+    
+    _wglGetExtensionsStringEXT = (PFNWGLGETEXTENSIONSSTRINGEXTPROC)wglGetProcAddress("wglGetExtensionsStringEXT");
+    
+    if (strstr(_wglGetExtensionsStringEXT(), extension_name) == NULL) {
+        return(false);
+    }
+    
+    return(true);
+}
+
+bool enable_vsync(){
+    PFNWGLSWAPINTERVALEXTPROC       wglSwapIntervalEXT = NULL;
+    PFNWGLGETSWAPINTERVALEXTPROC    wglGetSwapIntervalEXT = NULL;
+    
+    if (WGLExtensionSupported("WGL_EXT_swap_control"))
+    {
+        // Extension is supported, init pointers.
+        wglSwapIntervalEXT = (PFNWGLSWAPINTERVALEXTPROC)wglGetProcAddress("wglSwapIntervalEXT");
+        
+        // this is another function from WGL_EXT_swap_control extension
+        wglGetSwapIntervalEXT = (PFNWGLGETSWAPINTERVALEXTPROC)wglGetProcAddress("wglGetSwapIntervalEXT");
+        //Enable Vsync;
+        wglSwapIntervalEXT(1);
+        return(true);
+    }
+    return(false);
+}
+
 int CALLBACK WinMain(HINSTANCE instance,
 					 HINSTANCE prevInstance,
 					 LPSTR commandLine,
 					 int showCode) {
-	GLFWwindow * Window;
+	bool FrameRateLockedToMonitorRefreshRate = false;
+    GLFWwindow * Window;
 	if(!init_glfw(&Window,
 				  "Networking game")){
 		OutputDebugStringA("Could not init GLFW!");
@@ -184,12 +216,20 @@ int CALLBACK WinMain(HINSTANCE instance,
 	
 	gui * PlayerListGui  = get_memory_for_gui(&GuiMemoryManager);
 	gui * PlayerListGuiTitle = get_memory_for_gui(&GuiMemoryManager);
+    gui * FrameRateGui = get_memory_for_gui(&GuiMemoryManager);
 	label Label;
+    label FrameRateLabel;
+    init_gui(FrameRateGui,
+             "frameRateGui",
+             0,
+             0,
+             GlobalMasterGui);
 	init_gui(PlayerListGui,
 			 "playerListGui",
 			 0,
 			 0,
-			 GlobalMasterGui);
+             GlobalMasterGui);
+    
 	init_gui(PlayerListGuiTitle,
 			 "playerListTitleGui",
 			 0,
@@ -201,15 +241,31 @@ int CALLBACK WinMain(HINSTANCE instance,
 			   YELLOW,
 			   0.1f,
 			   RELATIVE_VALUE
+               );
+    init_label(&FrameRateLabel,
+			   FrameRateGui,
+               "Last frame time: %fms",
+			   BLACK,
+			   20.0f,
+			   FIXED_VALUE
 			   );
 	set_background_color_gui(PlayerListGui,
 							 WHITE,
 							 0.1f);
 	set_background_color_gui(PlayerListGuiTitle,
 							 RED,
-							 0.5f);
+                             0.5f);
+    set_background_color_gui(FrameRateGui,
+                             WHITE,
+                             0.2f);
 	apply_constraints_from_prop_file(PROP_FILE_PATH,
-									 &GuiMemoryManager);
+                                     &GuiMemoryManager);
+    float Timer1 = 0;
+    float Timer2 = 0;
+    float ElapsedTimeInMs = 0;
+    float ElapsedTimeInSeconds = 0;
+    Timer1 = glfwGetTime();
+    FrameRateLockedToMonitorRefreshRate = enable_vsync();
 	while (!glfwWindowShouldClose(Window))
 	{
 		FontDrawer.ScreenHeight = GlobalScreenHeight;
@@ -223,12 +279,20 @@ int CALLBACK WinMain(HINSTANCE instance,
 		gl_clear_screen(LAVENDER_BLUSH);
 		render_guis(GlobalMasterGui,
 					&GuiDrawer);
-		
-		float FontSize = 22.0f;
 		draw_label(&Label,
-				   &FontDrawer);
+                   &FontDrawer);
+        draw_label(&FrameRateLabel,
+                   &FontDrawer);
 		glfwSwapBuffers(Window);
 		glfwPollEvents();
+#if defined(DEBUG)
+        //Timing
+        Timer2 = glfwGetTime();
+        ElapsedTimeInSeconds = Timer2 - Timer1;
+        ElapsedTimeInMs = ElapsedTimeInSeconds * 1000.0f;
+        sprintf(FrameRateLabel.String,"Last frame time: %fms",ElapsedTimeInMs);
+        Timer1 = Timer2;
+#endif
 	}
 	glfwTerminate();
 	return 0;
