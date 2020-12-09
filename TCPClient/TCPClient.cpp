@@ -1,11 +1,11 @@
 /*
 TODO List:
+ -- Create buttons.
 -- Do the font rendering using the Signed distance fields for better quality.
--- Implement the ability to add various properties onto the guis.
+-- Implement the ability to add various properties onto the guis ie. colors, opacity.
 -- Add a titled gui.
  -- Implement the functionality to swap guis dynamically for better memory
     utilization.
- -- Create buttons.
  -- Create input boxes and dynamic array to fit varying size data in it.
  -- Kind of chat_gui_manager that gives us chat windows to chat to other players?
  -- Animations for the guis.
@@ -20,8 +20,10 @@ TODO List:
 */
 #define MAX_NUMBER_GUIS 100
 
+#include <stdio.h>
 #include "win32_includes.h"
 #include "opengl_includes.h"
+#include "wgl.h"
 #include "shadernew.h"
 #include "texturenew.h"
 #include "vaonew.h"
@@ -37,8 +39,7 @@ TODO List:
 #include "gui_renderer.h"
 #include "label.h"
 #include "label_renderer.h"
-#include "wgl.h"
-#include <stdio.h>
+#include "button.h"
 
 //Asset paths
 #define VERTEX_SHADER_PATH        "..\\TCPClient\\VertexShader.glsl"
@@ -217,6 +218,7 @@ int CALLBACK WinMain(HINSTANCE instance,
 	gui * PlayerListGui  = get_memory_for_gui(&GuiMemoryManager);
 	gui * PlayerListGuiTitle = get_memory_for_gui(&GuiMemoryManager);
     gui * FrameRateGui = get_memory_for_gui(&GuiMemoryManager);
+    gui * ButtonNextGui = get_memory_for_gui(&GuiMemoryManager);
 	label Label;
     label FrameRateLabel;
     init_gui(FrameRateGui,
@@ -234,7 +236,12 @@ int CALLBACK WinMain(HINSTANCE instance,
 			 "playerListTitleGui",
 			 0,
 			 0,
-			 PlayerListGui);
+             PlayerListGui);
+    init_gui(ButtonNextGui,
+             "nextButtonGui",
+             0,
+             0,
+             PlayerListGui);
 	init_label(&Label,
 			   PlayerListGuiTitle,
 			   "Player list",
@@ -253,6 +260,10 @@ int CALLBACK WinMain(HINSTANCE instance,
 							 WHITE,
 							 0.1f);
 	set_background_color_gui(PlayerListGuiTitle,
+							 RED,
+                             0.5f);
+    
+	set_background_color_gui(ButtonNextGui,
 							 RED,
                              0.5f);
     set_background_color_gui(FrameRateGui,

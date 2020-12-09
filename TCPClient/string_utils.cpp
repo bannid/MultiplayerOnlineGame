@@ -42,3 +42,13 @@ void copy_string(const char * Source,
     }
     *Destination = '\0';
 }
+
+void forward_string_pointer_upto_token(char ** Pointer,
+                                       char Token){
+    while(**Pointer != Token){
+        *Pointer += 1;
+        Assert(**Pointer != '\n');
+    }
+    //Eat the token as well
+    *Pointer += 1;
+}

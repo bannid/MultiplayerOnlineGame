@@ -79,7 +79,7 @@ void process_gui_constraints(gui * Gui){
 					Gui->TopLeftY += Gui->Constraints[i].Value;
 				}
 				else{
-					Gui->TopLeftY += Gui->Constraints[i].Value * Gui->Height;
+					Gui->TopLeftY += Gui->Constraints[i].Value * Gui->Parent->Height;
 				}
 				break;
 			}
@@ -91,7 +91,7 @@ void process_gui_constraints(gui * Gui){
 					Gui->TopLeftX += Gui->Constraints[i].Value;
 				}
 				else{
-					Gui->TopLeftX += Gui->Constraints[i].Value * Gui->Width;
+					Gui->TopLeftX += Gui->Constraints[i].Value * Gui->Parent->Width;
 				}
 				break;
 			}
@@ -104,7 +104,7 @@ void process_gui_constraints(gui * Gui){
 					break;
 				}
 				else{
-					Gui->TopLeftY += Gui->Parent->Height - Gui->Height - (Value * Gui->Height);
+					Gui->TopLeftY += Gui->Parent->Height - Gui->Height - (Value * Gui->Parent->Height);
 				}
 			}
 			
@@ -117,7 +117,7 @@ void process_gui_constraints(gui * Gui){
 					break;
 				}
 				else{
-					Gui->TopLeftX += Gui->Parent->Width - Gui->Width - (Value * Gui->Width);
+					Gui->TopLeftX += Gui->Parent->Width - Gui->Width - (Value * Gui->Parent->Width);
 				}
 				break;
 			}

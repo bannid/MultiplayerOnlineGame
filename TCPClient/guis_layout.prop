@@ -16,3 +16,10 @@ frameRateGui{
 	margin_top:0px;
 	margin_left:0px;
 }
+nextButtonGui{
+	height:20px;
+	width:20px;
+	margin_bottom:10px;
+	margin_left:0.3%;
+	background_color:rgb(1.0f,0.0f,0.0f,0.9f);
+}

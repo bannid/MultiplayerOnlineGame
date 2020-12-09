@@ -1,8 +1,8 @@
 #include "prop_processor.h"
 
 #define MAX_LENGTH_FOR_GUI_SELECTOR 50
-#define MAX_LINE_LENGTH 30
-#define MAX_PROPERTY_LENGTH 30
+#define MAX_LINE_LENGTH 100
+#define MAX_PROPERTY_LENGTH 100
 
 inline void eat_all_leading_white_space(char ** Ptr){
 	while(**Ptr == '\t' ||
@@ -119,8 +119,7 @@ void apply_constraints_from_prop_file(const char* FileName,
                 constraint_value_type ValueType;
                 float Value;
                 bool IsRelativeValue = string_ends_with(TempConstraintValue,'%');
-                Value = strtof(TempConstraintValue,NULL);
-                ValueType = IsRelativeValue ? RELATIVE_VALUE : FIXED_VALUE;
+                bool IsNumericValue = true;
                 
                 // TODO(NAME): Maybe do this code by introspection
                 if(compare_strings(TempConstraintType,"CENTER")){
@@ -141,10 +140,51 @@ void apply_constraints_from_prop_file(const char* FileName,
                 else if(compare_strings(TempConstraintType,"MARGIN_LEFT")){
                     ConstraintType = MARGIN_LEFT;
                 }
-                for(int j = 0; j<GuiManager->NumberOfGuis;j++){
-                    gui * Gui = GuiManager->GuisMemory + j;
-                    if(compare_strings(Gui->Selector,(const char*)GuiSelector)){
-                        add_constraint_gui(Gui,{ConstraintType,Value,ValueType});
+                else if(compare_strings(TempConstraintType,"MARGIN_BOTTOM")){
+                    ConstraintType = MARGIN_BOTTOM;
+                }
+                else if(compare_strings(TempConstraintType,"BACKGROUND_COLOR")){
+                    IsNumericValue = false;
+                    ConstraintType = MARGIN_BOTTOM;
+                }
+                
+                
+                //ie. the value is not a colors.
+                if(IsNumericValue){
+                    Value = strtof(TempConstraintValue,NULL);
+                    ValueType = IsRelativeValue ? RELATIVE_VALUE : FIXED_VALUE;
+                    for(int j = 0; j<GuiManager->NumberOfGuis;j++){
+                        gui * Gui = GuiManager->GuisMemory + j;
+                        if(compare_strings(Gui->Selector,(const char*)GuiSelector)){
+                            add_constraint_gui(Gui,{ConstraintType,Value,ValueType});
+                        }
+                    }
+                }
+                else{
+                    if(*(TempConstraintValue + 0) == 'r' &&
+                       *(TempConstraintValue + 1) == 'g' &&
+                       *(TempConstraintValue + 2) == 'b'){
+                        // TODO(NAME): Its a color with rgb encoded.
+                        char * PointerColor = TempConstraintValue + 4;
+                        float Red = 0.0f;
+                        float Green = 0.0f;
+                        float Blue = 0.0f;
+                        float Alpha = 0.0f;
+                        Red = strtof(PointerColor,NULL);
+                        forward_string_pointer_upto_token(&PointerColor,',');
+                        Green = strtof(PointerColor,NULL);
+                        forward_string_pointer_upto_token(&PointerColor,',');
+                        Blue = strtof(PointerColor,NULL);
+                        forward_string_pointer_upto_token(&PointerColor,',');
+                        Alpha = strtof(PointerColor,NULL);
+                        for(int j = 0; j<GuiManager->NumberOfGuis;j++){
+                            gui * Gui = GuiManager->GuisMemory + j;
+                            if(compare_strings(Gui->Selector,(const char*)GuiSelector)){
+                                set_background_color_gui(Gui,
+                                                         glm::vec4(Red,Green,Blue,1.0f),
+                                                         Alpha);
+                            }
+                        }
                     }
                 }
             }
