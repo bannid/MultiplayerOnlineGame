@@ -291,6 +291,7 @@ int CALLBACK WinMain(HINSTANCE instance,
         ElapsedTimeInSeconds = Timer2 - Timer1;
         ElapsedTimeInMs = ElapsedTimeInSeconds * 1000.0f;
         sprintf(FrameRateLabel.String,"Last frame time: %fms",ElapsedTimeInMs);
+        Assert(string_length(FrameRateLabel.String)<MAX_LABEL_SIZE);
         Timer1 = Timer2;
 #endif
 	}
