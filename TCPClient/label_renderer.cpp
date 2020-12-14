@@ -13,7 +13,7 @@ void draw_label(label * Label,
 											  DrawContext,
 											  Size);
 	int32 TopLeftX = Label->ContainerGui->TopLeftX;
-	int32 TopLeftY = Label->ContainerGui->TopLeftY;
+	int32 TopLeftY = Label->ContainerGui->TopLeftY + Size;
     switch(Label->Alignment){
         case CENTER_HORIZONTAL:{
             float Padding = (Label->ContainerGui->Width - TotalWidth) / 2.0f;

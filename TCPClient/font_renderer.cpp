@@ -9,10 +9,13 @@ inline void draw_char(char C,
 	character Character = DrawContext->CharacterSet.Characters[DecimalCode];
 	float CharacterWidth = (float)Character.Width * Size;
 	float CharacterHeight = (float)Character.Height * Size;
-	
-	float BottomRightX = TopLeftX + CharacterWidth;
+	float YOffset = (float)Character.YOffset * Size;
+    float BottomRightX = TopLeftX + CharacterWidth;
 	float BottomRightY = TopLeftY + CharacterHeight;
 	
+    BottomRightY -= (float)Size *  DrawContext->CharacterSet.Size;
+    TopLeftY -= (float)Size *  DrawContext->CharacterSet.Size;
+    
 	float TexTopLeftX = (float)Character.X / DrawContext->CharacterSet.TextureWidth;
 	float TexTopLeftY = (float)Character.Y / DrawContext->CharacterSet.TextureHeight;
 	float TexBotRightX =(float) (Character.X + Character.Width) / DrawContext->CharacterSet.TextureWidth;
