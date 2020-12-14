@@ -1,8 +1,8 @@
 #include "font_renderer.h"
 
 inline void draw_char(char C,
-					  int32 TopLeftX,
-					  int32 TopLeftY,
+                      float TopLeftX,
+                      float TopLeftY,
 					  draw_context * DrawContext,
 					  float Size){
 	int32 DecimalCode = (int32)C;
@@ -50,6 +50,8 @@ void draw_string(const char* String,
 				 draw_context * DrawContext,
 				 color_t Color,
 				 float Size){
+    float XFloat = (float)X;
+    float YFloat = (float)Y;
 	use_shader(DrawContext->Shader.ProgramId);
 	use_vao(DrawContext->VertexArrayObject.VAO);
 	use_texture(DrawContext->Texture.Id);
@@ -61,16 +63,16 @@ void draw_string(const char* String,
 		char C = *String;
 		int32 DecimalCode = int32(C);
 		character Character = DrawContext->CharacterSet.Characters[DecimalCode];
-		int32 XAdvance = (Character.XAdvance * Size) + 0.5f;
-		int32 YOffset = (Character.YOffset * Size) + 0.5f;
-		int32 XOffset = (Character.XOffset * Size) + 0.5f;;
+        float XAdvance = (Character.XAdvance * Size);
+        float YOffset = (Character.YOffset * Size);
+		float XOffset = (Character.XOffset * Size);
 		draw_char(*String,
-				  X + XOffset,
-				  Y + YOffset,
+                  XFloat + XOffset,
+                  YFloat + YOffset,
 				  DrawContext,
 				  Size);
 		String++;
-		X += XAdvance;
+		XFloat += XAdvance;
 	}
 }
 

@@ -9,13 +9,14 @@
 typedef void (*button_callback)(void*);
 
 struct button{
-    gui * ButtonGui;
+    gui * ButtonContainerGui;
     char ButtonText[MAX_BUTTON_TEXT_SIZE];
     button_callback Callback;
 };
 
 void init_button(button * Button,
-                 gui * ButtonGui,
-                 button_callback Callback);
+                 gui * ButtonConatinerGui,
+                 button_callback Callback,
+                 const char * ButtonText);
 
 #endif //BUTTON_H

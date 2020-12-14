@@ -3,23 +3,33 @@ playerListGui{
 	width: 0.3%;
 	margin_top: 10px;
 	margin_right: 10px;
+	background_color:rgba(1.0f,1.0f,1.0f,0.1f);
 }
 playerListTitleGui{
 	height:0.1%;
 	width:0.9%;
 	margin_top:10px;
 	margin_right:0.05%;
+	background_color:rgba(1.0f,0.0f,0.0f,0.0f);
 }
 frameRateGui{
 	height: 50px;
 	width:  300px;
 	margin_top:0px;
 	margin_left:0px;
+	background_color:rgba(1.0f,1.0f,1.0f,0.2f);
+}
+previousButtonGui{
+	height:0.1%;
+	width:0.2%;
+	margin_bottom:10px;
+	margin_left:0.1%;
+	background_color:rgba(1.0f,0.0f,0.0f,0.4f);
 }
 nextButtonGui{
-	height:20px;
-	width:20px;
+	height:0.1%;
+	width:0.2%;
 	margin_bottom:10px;
-	margin_left:0.3%;
-	background_color:rgb(1.0f,0.0f,0.0f,0.9f);
+	margin_right:0.1%;
+	background_color:rgba(1.0f,0.0f,0.0f,0.4f);
 }

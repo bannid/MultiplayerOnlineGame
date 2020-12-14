@@ -163,9 +163,10 @@ void apply_constraints_from_prop_file(const char* FileName,
                 else{
                     if(*(TempConstraintValue + 0) == 'r' &&
                        *(TempConstraintValue + 1) == 'g' &&
-                       *(TempConstraintValue + 2) == 'b'){
-                        // TODO(NAME): Its a color with rgb encoded.
-                        char * PointerColor = TempConstraintValue + 4;
+                       *(TempConstraintValue + 2) == 'b' &&
+                       *(TempConstraintValue + 3) == 'a'){
+                        // NOTE(Banni): Its a color with rgba values
+                        char * PointerColor = TempConstraintValue + 5;
                         float Red = 0.0f;
                         float Green = 0.0f;
                         float Blue = 0.0f;

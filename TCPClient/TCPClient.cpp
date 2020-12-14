@@ -1,8 +1,8 @@
 /*
 TODO List:
- -- Create buttons.
+ -- Create buttons
 -- Do the font rendering using the Signed distance fields for better quality.
--- Implement the ability to add various properties onto the guis ie. colors, opacity.
+-- Add the functionality to provide colors by their names in prop file defined in colors.h file.
 -- Add a titled gui.
  -- Implement the functionality to swap guis dynamically for better memory
     utilization.
@@ -40,6 +40,7 @@ TODO List:
 #include "label.h"
 #include "label_renderer.h"
 #include "button.h"
+#include "button_renderer.h"
 
 //Asset paths
 #define VERTEX_SHADER_PATH        "..\\TCPClient\\VertexShader.glsl"
@@ -152,6 +153,10 @@ bool enable_vsync(){
     return(false);
 }
 
+void TempCallbackFunction(void * Data){
+    DEBUG_OUTPUT("Hey there I am callback function");
+}
+
 int CALLBACK WinMain(HINSTANCE instance,
 					 HINSTANCE prevInstance,
 					 LPSTR commandLine,
@@ -218,9 +223,20 @@ int CALLBACK WinMain(HINSTANCE instance,
 	gui * PlayerListGui  = get_memory_for_gui(&GuiMemoryManager);
 	gui * PlayerListGuiTitle = get_memory_for_gui(&GuiMemoryManager);
     gui * FrameRateGui = get_memory_for_gui(&GuiMemoryManager);
-    gui * ButtonNextGui = get_memory_for_gui(&GuiMemoryManager);
+    gui * PreviousButtonGui = get_memory_for_gui(&GuiMemoryManager);
+    gui * NextButtonGui = get_memory_for_gui(&GuiMemoryManager);
 	label Label;
     label FrameRateLabel;
+    button PreviousButton;
+    button NextButton;
+    init_button(&PreviousButton,
+                PreviousButtonGui,
+                TempCallbackFunction,
+                "<");
+    init_button(&NextButton,
+                NextButtonGui,
+                TempCallbackFunction,
+                ">");
     init_gui(FrameRateGui,
              "frameRateGui",
              0,
@@ -237,7 +253,12 @@ int CALLBACK WinMain(HINSTANCE instance,
 			 0,
 			 0,
              PlayerListGui);
-    init_gui(ButtonNextGui,
+    init_gui(PreviousButtonGui,
+             "previousButtonGui",
+             0,
+             0,
+             PlayerListGui);
+    init_gui(NextButtonGui,
              "nextButtonGui",
              0,
              0,
@@ -245,7 +266,7 @@ int CALLBACK WinMain(HINSTANCE instance,
 	init_label(&Label,
 			   PlayerListGuiTitle,
 			   "Player list",
-			   YELLOW,
+			   BLACK,
 			   0.1f,
 			   RELATIVE_VALUE
                );
@@ -256,19 +277,6 @@ int CALLBACK WinMain(HINSTANCE instance,
 			   20.0f,
 			   FIXED_VALUE
 			   );
-	set_background_color_gui(PlayerListGui,
-							 WHITE,
-							 0.1f);
-	set_background_color_gui(PlayerListGuiTitle,
-							 RED,
-                             0.5f);
-    
-	set_background_color_gui(ButtonNextGui,
-							 RED,
-                             0.5f);
-    set_background_color_gui(FrameRateGui,
-                             WHITE,
-                             0.2f);
 	apply_constraints_from_prop_file(PROP_FILE_PATH,
                                      &GuiMemoryManager);
     float Timer1 = 0;
@@ -289,7 +297,11 @@ int CALLBACK WinMain(HINSTANCE instance,
         }
 		gl_clear_screen(LAVENDER_BLUSH);
 		render_guis(GlobalMasterGui,
-					&GuiDrawer);
+                    &GuiDrawer);
+        render_button(&PreviousButton,
+                      &FontDrawer);
+        render_button(&NextButton,
+                      &FontDrawer);
 		draw_label(&Label,
                    &FontDrawer);
         draw_label(&FrameRateLabel,
