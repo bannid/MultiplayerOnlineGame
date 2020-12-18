@@ -3,8 +3,8 @@
 #include "common_client.h"
 
 void draw_rectangle(draw_context * DrawContext,
-					int32 TopLeftX,
-					int32 TopLeftY,
-					int32 BottomRightX,
-					int32 BottomRightY);
+                    float TopLeftX,
+                    float TopLeftY,
+                    float BottomRightX,
+                    float BottomRightY);
 #endif

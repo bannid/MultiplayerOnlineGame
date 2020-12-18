@@ -1,10 +1,10 @@
 #include "renderer.h"
 
 void draw_rectangle(draw_context * DrawContext,
-					int32 TopLeftX,
-					int32 TopLeftY,
-					int32 BottomRightX,
-					int32 BottomRightY){
+                    float TopLeftX,
+                    float TopLeftY,
+                    float BottomRightX,
+                    float BottomRightY){
 	float vertices[] = {
 		BottomRightX,  TopLeftY,           0.0f,1.0f,0.0f,  // top right
 		BottomRightX,  BottomRightY,       0.0f,1.0f,1.0f,  // bottom right

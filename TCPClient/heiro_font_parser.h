@@ -10,7 +10,7 @@
 #define MAX_CHARACTERS 150
 #define MAX_LENGTH_FONT_NAME 20
 
-struct character{
+struct heiro_character{
 	int32 DecimalCode;
 	int32 X;
 	int32 Y;
@@ -21,7 +21,7 @@ struct character{
 	int32 XAdvance;
 };
 struct character_set{
-	character Characters[MAX_CHARACTERS];
+	heiro_character Characters[MAX_CHARACTERS];
 	int32 LineHeight;
 	int32 Size;
 	char FontName[MAX_LENGTH_FONT_NAME];
@@ -29,7 +29,7 @@ struct character_set{
 	uint32 TextureWidth;
 	uint32 TextureHeight;
 };
-bool parse_font_file(const char* FontFilePath,
-					 character_set * Characters);
+bool heiro_parse_font_file(const char* FontFilePath,
+                           character_set * Characters);
 
 #endif

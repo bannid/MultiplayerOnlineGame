@@ -15,4 +15,7 @@ struct draw_context{
 	int32 ScreenWidth;
 };
 
+typedef draw_context font_draw_context;
+typedef draw_context gui_draw_context;
+
 #endif

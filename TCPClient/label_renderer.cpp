@@ -1,7 +1,7 @@
 #include "label_renderer.h"
 
 void draw_label(label * Label,
-				draw_context * DrawContext){
+				font_draw_context * DrawContext){
 	float Size;
 	if(Label->SizeType == FIXED_VALUE){
 		Size = Label->Size;
@@ -17,7 +17,8 @@ void draw_label(label * Label,
     switch(Label->Alignment){
         case CENTER_HORIZONTAL:{
             float Padding = (Label->ContainerGui->Width - TotalWidth) / 2.0f;
-            TopLeftX += Padding;
+            
+            //TopLeftX += Padding;
             break;
         }
         case LEFT:{

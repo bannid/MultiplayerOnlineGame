@@ -136,7 +136,7 @@ void process_gui_constraints(gui * Gui){
 }
 // NOTE(Banni): This function may result in stack overflow
 void draw_gui(gui * Gui,
-			  draw_context * DrawContext){
+			  gui_draw_context * DrawContext){
 	use_shader(DrawContext->Shader.ProgramId);
 	process_gui_constraints(Gui);
 	set_vec4(&DrawContext->Shader,

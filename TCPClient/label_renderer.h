@@ -9,6 +9,6 @@
 #include "string_utils.h"
 
 void draw_label(label * Label,
-				draw_context * DrawContext);
+				font_draw_context * DrawContext);
 
 #endif

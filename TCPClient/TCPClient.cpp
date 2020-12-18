@@ -1,5 +1,7 @@
 /*
 TODO List:
+-- REFACTOR(Load all fonts texture in one place)
+
  -- Create buttons
 -- Do the font rendering using the Signed distance fields for better quality.
 -- Add the functionality to provide colors by their names in prop file defined in colors.h file.
@@ -19,7 +21,9 @@ TODO List:
  4. Sound.
 */
 #define MAX_NUMBER_GUIS 100
-
+//Global stuff
+#include "c_code_fonts.cpp"
+//End global stuff
 #include <stdio.h>
 #include "win32_includes.h"
 #include "opengl_includes.h"
@@ -168,11 +172,11 @@ int CALLBACK WinMain(HINSTANCE instance,
 		OutputDebugStringA("Could not init GLFW!");
 		return -1;
 	}
-	draw_context FontDrawer;
-	draw_context GuiDrawer;
+    font_draw_context FontDrawer;
+	gui_draw_context GuiDrawer;
 	gui_manager GuiMemoryManager;
-	if(!parse_font_file(FONT_FILE_PATH,
-						&FontDrawer.CharacterSet)){
+	if(!heiro_parse_font_file(FONT_FILE_PATH,
+                              &FontDrawer.CharacterSet)){
 		OutputDebugStringA("Failed to load the character set info!");
 		return -1;
 	}
@@ -287,6 +291,7 @@ int CALLBACK WinMain(HINSTANCE instance,
     FrameRateLockedToMonitorRefreshRate = enable_vsync();
 	while (!glfwWindowShouldClose(Window))
 	{
+        DEBUG_OUTPUT(GlobalFontCambria.FontName);
 		FontDrawer.ScreenHeight = GlobalScreenHeight;
 		FontDrawer.ScreenWidth = GlobalScreenWidth;
 		GuiDrawer.ScreenWidth  = GlobalScreenWidth;
@@ -313,7 +318,7 @@ int CALLBACK WinMain(HINSTANCE instance,
         Timer2 = glfwGetTime();
         ElapsedTimeInSeconds = Timer2 - Timer1;
         ElapsedTimeInMs = ElapsedTimeInSeconds * 1000.0f;
-        sprintf(FrameRateLabel.String,"Last frame time: %fms",ElapsedTimeInMs);
+        sprintf(FrameRateLabel.String,"LFT: %fms",ElapsedTimeInMs);
         Assert(string_length(FrameRateLabel.String)<MAX_LABEL_SIZE);
         Timer1 = Timer2;
 #endif

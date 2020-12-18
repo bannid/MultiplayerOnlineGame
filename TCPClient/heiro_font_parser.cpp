@@ -1,3 +1,4 @@
+
 #include "heiro_font_parser.h"
 #define MAX_WORD_SIZE 30
 
@@ -63,8 +64,8 @@ void copy_filename_face(char * Source,
 	*Destination = '\0';
 }
 
-bool parse_font_file(const char* FontFilePath,
-					 character_set * CharacterSet){
+bool heiro_parse_font_file(const char* FontFilePath,
+                           character_set * CharacterSet){
 	win32_file FontInfo;
 	if(!read_entire_file(FontFilePath,
 						 &FontInfo)){
@@ -127,7 +128,7 @@ bool parse_font_file(const char* FontFilePath,
 	}
 	char * Line = NULL;
 	uint32 MemoryAllocatedForLine = 0;
-	for(uint32 j = 0; j<96; j++){
+	for(uint32 j = 0; j<94; j++){
 		char * LineSeeker = Ptr;
 		int32 LineLength = 0;
 		//Find out the length of the current line
@@ -170,7 +171,7 @@ bool parse_font_file(const char* FontFilePath,
 		char Word[MAX_WORD_SIZE];
 		//We dont care about word 'char'
 		get_next_word_from_line(&LinePtr,Word);
-		character * Character = NULL;
+		heiro_character * Character = NULL;
 		//Ten attributes per character
 		for(int32 i = 0; i<10; i++){
 			get_next_word_from_line(&LinePtr,Word);

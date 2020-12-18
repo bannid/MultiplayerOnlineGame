@@ -8,6 +8,6 @@
 #include "shadernew.h"
 
 void draw_gui(gui * Gui,
-			  draw_context * DrawContext);
+			  gui_draw_context * DrawContext);
 
 #endif

@@ -20,4 +20,7 @@ void draw_string(const char* String,
 int32 get_drawn_string_width(const char * String,
 							 draw_context * DrawContext,
 							 float Size);
+int32 get_strings_highestchars_height(const char * String,
+                                      draw_context * DrawContext,
+                                      float Size);
 #endif

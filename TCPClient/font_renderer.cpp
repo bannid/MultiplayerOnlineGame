@@ -6,7 +6,7 @@ inline void draw_char(char C,
 					  draw_context * DrawContext,
 					  float Size){
 	int32 DecimalCode = (int32)C;
-	character Character = DrawContext->CharacterSet.Characters[DecimalCode];
+	heiro_character Character = DrawContext->CharacterSet.Characters[DecimalCode];
 	float CharacterWidth = (float)Character.Width * Size;
 	float CharacterHeight = (float)Character.Height * Size;
 	float YOffset = (float)Character.YOffset * Size;
@@ -65,7 +65,7 @@ void draw_string(const char* String,
 	while(*String != '\0'){
 		char C = *String;
 		int32 DecimalCode = int32(C);
-		character Character = DrawContext->CharacterSet.Characters[DecimalCode];
+		heiro_character Character = DrawContext->CharacterSet.Characters[DecimalCode];
         float XAdvance = (Character.XAdvance * Size);
         float YOffset = (Character.YOffset * Size);
 		float XOffset = (Character.XOffset * Size);
@@ -88,7 +88,7 @@ int32 get_drawn_string_width(const char * String,
 	while(*String != '\0'){
 		char C = *String;
 		int32 DecimalCode = int32(C);
-		character Character = DrawContext->CharacterSet.Characters[DecimalCode];
+		heiro_character Character = DrawContext->CharacterSet.Characters[DecimalCode];
 		int32 XAdvance = (Character.XAdvance * Size) + 0.5f;
 		int32 YOffset = (Character.YOffset * Size) + 0.5f;
 		int32 XOffset = (Character.XOffset * Size) + 0.5f;

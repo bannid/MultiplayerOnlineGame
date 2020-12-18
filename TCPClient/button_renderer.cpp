@@ -1,7 +1,7 @@
 #include "button_renderer.h"
 
 void render_button(button * Button,
-                   draw_context * DrawContext){
+                   font_draw_context * DrawContext){
     label Label;
     init_label(&Label,
                Button->ButtonContainerGui,
