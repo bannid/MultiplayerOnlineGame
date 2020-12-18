@@ -1,6 +1,8 @@
 /*
 TODO List:
--- REFACTOR(Load all fonts texture in one place)
+-- REFACTOR: Load all fonts texture for online_font stuff in one place.
+--           Draw the fonts using the online_font_parser
+--           Remove the heiro_font_parser
 
  -- Create buttons
 -- Do the font rendering using the Signed distance fields for better quality.
@@ -291,7 +293,7 @@ int CALLBACK WinMain(HINSTANCE instance,
     FrameRateLockedToMonitorRefreshRate = enable_vsync();
 	while (!glfwWindowShouldClose(Window))
 	{
-        DEBUG_OUTPUT(GlobalFontCambria.FontName);
+        DEBUG_OUTPUT(GlobalAllFonts[0]->FontName);
 		FontDrawer.ScreenHeight = GlobalScreenHeight;
 		FontDrawer.ScreenWidth = GlobalScreenWidth;
 		GuiDrawer.ScreenWidth  = GlobalScreenWidth;

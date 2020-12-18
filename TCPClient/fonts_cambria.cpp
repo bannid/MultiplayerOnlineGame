@@ -9,7 +9,7 @@ struct online_font {
     online_character *Characters;
 };
 
-static online_character GlobalCharactersCambria[] = {
+static online_character _charactersCambria[] = {
     {' ', 406, 75, 12, 12, 6, 6},
     {'!', 676, 41, 16, 33, 3, 27},
     {'"', 260, 75, 21, 19, 4, 28},
@@ -107,7 +107,7 @@ static online_character GlobalCharactersCambria[] = {
     {'~', 297, 75, 31, 18, 4, 18},
 };
 
-static online_font GlobalFontCambria = {
+static online_font _fontCambria = {
     "Cambria",
     "cambria.png",
     32,
@@ -116,4 +116,4 @@ static online_font GlobalFontCambria = {
     1024,
     128,
     95,
-    GlobalCharactersCambria};
+    _charactersCambria};
